@@ -3,6 +3,9 @@
 # dependencies
 client/node_modules/*
 server/node_modules/*
+
+docker/mysql/volume
+
 /.pnp
 .pnp.js
 

@@ -4,9 +4,9 @@ RUN npm install -g nodemon
 
 WORKDIR /app
 
-COPY ./package.json ./
+COPY ./package.json package-lock.json* ./
 
-RUN npm install
+RUN npm install --save
 
 COPY . .
 

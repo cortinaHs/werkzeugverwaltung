@@ -21,4 +21,16 @@ services:
       - /app/node_modules
     ports:
       - "8080:8080"
+    depends_on:
+      - mysql
     
+  mysql:
+    container_name: werkzeugverwaltung_mysql
+    image: mysql:8
+    restart: always
+    environment:
+          MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+          - '3306:3306'
+    volumes:
+      - ./docker/mysql/volume:/var/lib/mysql
