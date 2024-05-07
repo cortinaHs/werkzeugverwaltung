@@ -14,10 +14,10 @@ console.log(`Running on port ${PORT}`);
 
 
 const connection = mysql.createConnection({
-  host: "mysql",
-  user: "root",
-  password: "password",
-  database: "werkzeugverwaltung",
+	host: "werkzeugverwaltung_mysql",
+	user: "root",
+	password: "password",
+	database: "werkzeugverwaltung"
 });
 
 connection.connect();

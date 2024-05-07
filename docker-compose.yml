@@ -1,12 +1,11 @@
-version: '3.8'
 services:
   client:
     container_name: werkzeugverwaltung_client
     build:
       context: ./client
     volumes:
-      - ./client:/app
-      - /app/node_modules
+      - ./client/public:/app/public
+      - ./client/src:/app/src
     ports:
       - "3000:3000"
     environment:
@@ -25,11 +24,14 @@ services:
       - mysql
     
   mysql:
+    hostname: werkzeugverwaltung_mysql
     container_name: werkzeugverwaltung_mysql
-    image: mysql:8
+    image: mysql:8.4
     restart: always
+    command: mysqld --mysql-native-password=ON
     environment:
           MYSQL_ROOT_PASSWORD: 'password'
+          MYSQL_DATABASE: 'werkzeugverwaltung'
     ports:
           - '3306:3306'
     volumes:
