@@ -1,0 +1,7 @@
+-- CREATE DATABASE werkzeugverwaltung;
+
+CREATE TABLE users (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY
+);
+
+INSERT INTO users VALUES (1);

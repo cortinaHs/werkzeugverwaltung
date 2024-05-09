@@ -12,7 +12,6 @@ const PORT = 8080;
 app.listen(PORT);
 console.log(`Running on port ${PORT}`);
 
-
 const connection = mysql.createConnection({
 	host: "werkzeugverwaltung_mysql",
 	user: "root",
