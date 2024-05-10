@@ -1,0 +1,108 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Das Prisma-Schema
+model Userdata {
+    id Int     @id @default(autoincrement())
+    first_name String
+    last_name String
+    street  String
+    house_number  String
+    postal_code  String
+    place_of_residence  String
+    isAdmin  Boolean @default(false)
+
+    // Beziehung zu Reservation und Tool
+    reservations Reservation[]
+    tools        Tool[]
+    favorites    Favorite[]
+    notifications Notification[]
+}
+
+model Category {
+    id   Int    @id @default(autoincrement())
+    name String @unique
+
+    // Beziehung zu Tool
+    tools Tool[]
+}
+
+model Tool {
+    id          Int     @id @default(autoincrement())
+    name        String
+    description String?
+    photo       String?
+    categoryId  Int
+    ownerId     Int
+    
+    // Beziehungen
+    category Category @relation(fields: [categoryId], references: [id])
+    owner Userdata @relation(fields: [ownerId], references: [id])
+    
+    reservations Reservation[]
+    favorites    Favorite[]
+}
+
+model Favorite {
+    userId Int
+    toolId Int
+
+    // Beziehungen
+    user Userdata @relation(fields: [userId], references: [id])
+    tool Tool @relation(fields: [toolId], references: [id])
+
+    // Kombinierter Primärschlüssel
+    @@id([userId, toolId])
+}
+
+model Reservation {
+    id         Int      @id @default(autoincrement())
+    userId     Int
+    toolId     Int
+    startDate  DateTime
+    endDate    DateTime
+    confirmed  Boolean  @default(false)
+
+    // Beziehungen
+    user Userdata @relation(fields: [userId], references: [id])
+    tool Tool @relation(fields: [toolId], references: [id])
+
+    notifications Notification[]
+    loans Loan[]
+}
+
+model Notification {
+    id            Int      @id @default(autoincrement())
+    userId        Int
+    reservationId Int?
+    type          String
+    message       String
+    createdAt     DateTime @default(now())
+
+    // Beziehungen
+    user Userdata @relation(fields: [userId], references: [id])
+    reservation Reservation? @relation(fields: [reservationId], references: [id])
+}
+
+model Loan {
+    id            Int      @id @default(autoincrement())
+    reservationId Int
+    borrowDate    DateTime
+    returnDate    DateTime?
+
+    // Beziehung
+    reservation Reservation @relation(fields: [reservationId], references: [id])
+}
+
