@@ -1,28 +1,28 @@
 services:
-  client:
-    container_name: werkzeugverwaltung_client
+  app:
+    container_name: werkzeugverwaltung_app
     build:
-      context: ./client
+      context: .
     volumes:
-      - ./client/public:/app/public
-      - ./client/src:/app/src
-      - ./client/styles:/app/styles
+      - ./public:/app/public
+      - ./src:/app/src
+      - ./styles:/app/styles
     ports:
       - "3000:3000"
     environment:
       NODE_ENV: development
 
-  server: 
-    container_name: werkzeugverwaltung_server
-    build: 
-      context: ./server
-    volumes:
-      - ./server:/app
-      - /app/node_modules
-    ports:
-      - "8080:8080"
-    depends_on:
-      - mysql
+  # server: 
+  #   container_name: werkzeugverwaltung_server
+  #   build: 
+  #     context: ./server
+  #   volumes:
+  #     - ./server:/app
+  #     - /app/node_modules
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on:
+  #     - mysql
     
   mysql:
     hostname: werkzeugverwaltung_mysql

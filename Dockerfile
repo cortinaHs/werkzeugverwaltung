@@ -8,6 +8,7 @@ RUN npm ci
 
 COPY src ./src
 COPY public ./public
+COPY prisma ./prisma
 COPY jsconfig.json ./
 COPY next.config.mjs ./
 COPY postcss.config.mjs ./
