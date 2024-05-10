@@ -1,22 +1,34 @@
-export default function LogIn() {
+import { FormEvent } from "react";
+
+export default async function RegisterPage() {
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		const formData = FormData(e.currentTarget);
+		const response = await fetch('api/auth/register', {
+			method: 'POST',
+			body: JSON.stringify({
+				email: formData.get('email'),
+				password: formData.get('password')
+			})
+		}); 
+		console.log(email, password)
+	}
+
+	
 	return (
+
 		<>
+
 			<div className="flex flex-col justify-center flex-1 min-h-full px-6 py-12 lg:px-8">
 				<div className="sm:mx-auto sm:w-full sm:max-w-sm">
 					<h2 className="mt-10 text-2xl font-bold leading-9 tracking-tight text-center text-gray-900">
-						Melde dich an
+						Registrierung
 					</h2>
 				</div>
 
 				<div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-					<form
-						className="space-y-6"
-						method="POST"
-						action={async (formData) => {
-							"use server";
-							await signIn("credentials", formData);
-						}}
-					>
+					<form className="space-y-6" onSubmit={handleSubmit} method="POST">
 						<div>
 							<label
 								htmlFor="email"
@@ -44,14 +56,6 @@ export default function LogIn() {
 								>
 									Passwort
 								</label>
-								<div className="text-sm">
-									<a
-										href="#"
-										className="font-semibold text-green-700 hover:text-green-600"
-									>
-										Passwort vergessen?
-									</a>
-								</div>
 							</div>
 							<div className="mt-2">
 								<input
@@ -70,18 +74,18 @@ export default function LogIn() {
 								type="submit"
 								className="flex w-full justify-center rounded-md bg-green-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 							>
-								Log in
+								Registrieren
 							</button>
 						</div>
 					</form>
 
 					<p className="mt-10 text-sm text-center text-gray-500">
-						Noch kein Mitglied?{" "}
+						Bereits Mitglied?{" "}
 						<a
 							href="#"
 							className="font-semibold leading-6 text-green-700 hover:text-green-800"
 						>
-							Hier kostenlos anmelden.
+							Hier anmelden.
 						</a>
 					</p>
 				</div>

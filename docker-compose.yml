@@ -6,7 +6,6 @@ services:
     volumes:
       - ./public:/app/public
       - ./src:/app/src
-      - ./styles:/app/styles
     ports:
       - "3000:3000"
     environment:
