@@ -10,19 +10,9 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: development
+    depends_on:
+      - mysql
 
-  # server: 
-  #   container_name: werkzeugverwaltung_server
-  #   build: 
-  #     context: ./server
-  #   volumes:
-  #     - ./server:/app
-  #     - /app/node_modules
-  #   ports:
-  #     - "8080:8080"
-  #   depends_on:
-  #     - mysql
-    
   mysql:
     hostname: werkzeugverwaltung_mysql
     container_name: werkzeugverwaltung_mysql
