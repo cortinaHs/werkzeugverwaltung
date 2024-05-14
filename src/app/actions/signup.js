@@ -1,14 +1,12 @@
 "use server";
 import { SignupFormSchema } from "../lib/zod";
-import { prisma } from "../lib/client";
+import { prisma } from "../lib/prisma";
 import { createSession } from "../lib/sessions";
+import { middleware } from "../middleware";
 const bcrypt = require("bcrypt");
 const { Prisma } = require("@prisma/client");
 
-
-
 export async function signUp(formState, formData) {
-
 	// Validate form fields
 	const validatedFields = SignupFormSchema.safeParse({
 		name: formData.get("name"),
@@ -18,6 +16,7 @@ export async function signUp(formState, formData) {
 	// If any form fields are invalid, return early
 	if (!validatedFields.success) {
 		return {
+			
 			errors: validatedFields.error.flatten().fieldErrors,
 		};
 	}
@@ -26,14 +25,14 @@ export async function signUp(formState, formData) {
 	const hashedPassword = await bcrypt.hash(password, 10);
 
 	try {
-		const user = await prisma.user
-			.create({
-				data: {
-					name,
-					email,
-					password: hashedPassword,
-				},
-			})
+		const user = await prisma.user.create({
+			data: {
+				name,
+				email,
+				password: hashedPassword,
+			},
+		});
+		// middleware(formData)
 	} catch (e) {
 		// handle unique email constraint
 		if (e instanceof Prisma.PrismaClientKnownRequestError) {
@@ -41,16 +40,12 @@ export async function signUp(formState, formData) {
 				return {
 					errors: "Es gibt bereits einen Account mit dieser Email.",
 				};
-			};
-		};
+			}
+		}
 		throw e;
 	}
-	console.log(user)
-	const session = createSession(user.id)
-	console.log(session)
+	
 	// TODO:
 	// 4. Create user session
 	// 5. Redirect user
 }
-
-

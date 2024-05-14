@@ -1,4 +1,4 @@
-import { SignupForm } from '../../ui/signup-form'
+import { SignupForm } from './form'
 
 export default async function SignupPage() {
 	

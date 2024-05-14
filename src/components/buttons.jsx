@@ -5,31 +5,44 @@ import Link from "next/link";
 
 export const SignInButton = () => {
 	return (
-		<button style={{ marginRight: 10 }} onClick={() => signIn()}>
-			Sign in
+		<button
+			className="mx-1 text-sm font-semibold leading-6 text-gray-900"
+			onClick={() => signIn()}
+		>
+			Anmelden
 		</button>
 	);
 };
 
 export const SignUpButton = () => {
 	return (
-		<Link href="/signup" style={{ marginRight: 10 }}>
-			Register
+		<Link
+			href="/signup"
+			className="mx-1 text-sm font-semibold leading-6 text-gray-900"
+		>
+			Registrieren
 		</Link>
 	);
 };
 
 export const SignOutButton = () => {
 	return (
-		<button style={{ marginRight: 10 }} onClick={() => signOut()}>
-			Sign Out
+		<button
+			className="mx-1 text-sm font-semibold leading-6 text-gray-900"
+			onClick={() => signOut()}
+		>
+			Abmelden
 		</button>
 	);
 };
 
 export const ProfileButton = () => {
-	return <Link href="/profile">Profile</Link>;
+	return (
+		<Link
+			href="/profile"
+			className="mx-1 text-sm font-semibold leading-6 text-gray-900"
+		>
+			Profile
+		</Link>
+	);
 };
-
-
-// TODO: Add button styles from tailwind
