@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 const HomePage = () => {
     return (
         <div className="bg-gray-100 min-h-screen">
@@ -7,6 +8,7 @@ const HomePage = () => {
                 <nav className="container mx-auto py-4 flex justify-between items-center">
                     <div className="text-4xl font-bold text-gray-800">Neighbortool</div>
                     <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Anmelden</button>
+                
                 </nav>
             </header>
             <main className="container mx-auto py-8">
@@ -51,22 +53,23 @@ const HomePage = () => {
 };
 
 export default HomePage;
-import { SignInButton, SignUpButton, SignOutButton, ProfileButton } from "@/components/buttons";
-import { auth } from "@/auth";
 
-// `app/page.js` is the UI for the `/` URL
-export default async function Page() {
-	const session = await auth()
-	return(
-		<>
-			<h1>Hello, Home page lala!</h1>;
-			<p>Welcome {session?.user.name}!</p>
-			<div>
-				<SignInButton />
-				<SignUpButton />
-				<SignOutButton />
-				<ProfileButton />
+// import { SignInButton, SignUpButton, SignOutButton, ProfileButton } from "@/components/buttons";
+// import { auth } from "@/auth";
 
-		</div>
-	</>
-)}
+// // `app/page.js` is the UI for the `/` URL
+// export default async function Page() {
+// 	const session = await auth()
+// 	return(
+// 		<>
+// 			<h1>Hello, Home page lala!</h1>;
+// 			<p>Welcome {session?.user.name}!</p>
+// 			<div>
+// 				<SignInButton />
+// 				<SignUpButton />
+// 				<SignOutButton />
+// 				<ProfileButton />
+
+// 		</div>
+// 	</>
+// )}
