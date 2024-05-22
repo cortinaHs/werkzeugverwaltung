@@ -11,8 +11,8 @@ function classNames(...classes) {
 
 const navigation = [
 	{ name: "Gerätesuche", href: "/search", current: false },
-	{ name: "Kalender", href: "/calender", current: false },
-	{ name: "Gerät hinzufügen", href: "/addtool", current: false },
+	{ name: "Reservierungen", href: "/calender", current: false },
+	{ name: "Gerät registrieren", href: "/addtool", current: false },
 ];
 
 export function HeaderAuthenticated() {
@@ -118,7 +118,7 @@ export function HeaderAuthenticated() {
 															"block px-4 py-2 text-sm text-gray-700"
 														)}
 													>
-														Einstellungen
+														Eigene Geräte
 													</Link>
 												)}
 											</MenuItem>
