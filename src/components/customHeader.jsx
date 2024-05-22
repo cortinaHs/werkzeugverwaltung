@@ -1,17 +1,19 @@
-"use client"
+'use client'
 import { useState } from "react";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import {Bars3Icon, XMarkIcon, WrenchScrewdriverIcon} from "@heroicons/react/24/outline";
-import { SignInButton, SignUpButton } from "./buttons";
-
+import {ProfileButton, SignInButton, SignOutButton, SignUpButton} from "./authbuttons";
+import { useSession } from "next-auth/react";
 
 function classNames(...classes) {
 	return classes.filter(Boolean).join(" ");
 }
 
-export default function HeaderNotAuthenticated() {
+export default function CustomHeader() {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+	const { data: session } = useSession();
+	const user = session?.user;
+	
 	return (
 		<header className="bg-white">
 			<nav
@@ -35,18 +37,39 @@ export default function HeaderNotAuthenticated() {
 						<Bars3Icon className="w-6 h-6" aria-hidden="true" />
 					</button>
 				</div>
-				<div className="relative hidden lg:flex lg:gap-x-12">
-					<a
-						href="/search"
-						className="text-sm font-semibold leading-6 text-gray-900"
-					>
-						Gerätesuche
-					</a>
-				</div>
-				<div className="hidden lg:flex lg:flex-1 lg:justify-end">
-					<SignUpButton />
-					<SignInButton />
-				</div>
+				{user ? (
+					<>
+						<div className="relative hidden lg:flex lg:gap-x-12">
+							<a
+								href="/search"
+								className="text-sm font-semibold leading-6 text-gray-900"
+							>
+								Gerätesuche
+							</a>
+							<a
+								href="/favorites"
+								className="text-sm font-semibold leading-6 text-gray-900"
+							>
+								Favoriten
+							</a>
+							<a
+								href="/toolregistration"
+								className="text-sm font-semibold leading-6 text-gray-900"
+							>
+								Gerät hinzufügen
+							</a>
+						</div>
+						<div className="hidden lg:flex lg:flex-1 lg:justify-end">
+							<ProfileButton />
+							<SignOutButton />
+						</div>
+					</>
+				) : (
+					<div className="hidden lg:flex lg:flex-1 lg:justify-end">
+						<SignUpButton />
+						<SignInButton />
+					</div>
+				)}
 			</nav>
 			<Dialog
 				className="lg:hidden"
@@ -70,24 +93,47 @@ export default function HeaderNotAuthenticated() {
 						</button>
 					</div>
 					<div className="flow-root mt-6">
-						<div className="-my-6 divide-y divide-gray-500/10">
-							<div className="py-6 space-y-2">
-								<a
-									href="/suche"
-									className="block px-3 py-2 -mx-3 text-base font-semibold leading-7 text-gray-900 rounded-lg hover:bg-gray-50"
-								>
-									Gerätesuche
-								</a>
+						{user ? (
+							<div className="-my-6 divide-y divide-gray-500/10">
+								<div className="py-6 space-y-2">
+									<a
+										href="/suche"
+										className="block px-3 py-2 -mx-3 text-base font-semibold leading-7 text-gray-900 rounded-lg hover:bg-gray-50"
+									>
+										Gerätesuche
+									</a>
+									<a
+										href="/favorites"
+										className="block px-3 py-2 -mx-3 text-base font-semibold leading-7 text-gray-900 rounded-lg hover:bg-gray-50"
+									>
+										Favoriten
+									</a>
+									<a
+										href="/toolregistration"
+										className="block px-3 py-2 -mx-3 text-base font-semibold leading-7 text-gray-900 rounded-lg hover:bg-gray-50"
+									>
+										Gerät hinzufügen
+									</a>
+								</div>
+								<div className="py-6">
+									<ProfileButton />
+									<br />
+									<SignOutButton />
+								</div>
 							</div>
+						) : (
 							<div className="py-6">
 								<SignUpButton />
 								<br />
 								<SignInButton />
 							</div>
-						</div>
+						)}
 					</div>
 				</DialogPanel>
 			</Dialog>
 		</header>
 	);
 }
+
+// TODO: Navbar not signedin
+
