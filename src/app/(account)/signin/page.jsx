@@ -1,4 +1,4 @@
-import { signIn } from "../../auth.js";
+import { signIn } from "../../lib/auth.js";
 import Link from "next/link";
 
 export default async function SignInPage() {

@@ -1,9 +1,9 @@
 import NextAuth, { CredentialsSignin } from "next-auth";
 import { ZodError } from "zod";
 import Credentials from "next-auth/providers/credentials";
-import { signInSchema } from "./lib/zod.js";
+import { signInSchema } from "./zod.js";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { prisma } from "@/app/lib/client.js";
+import { prisma } from "@/app/lib/prisma.js";
 
 const bcrypt = require("bcrypt");
 
@@ -15,7 +15,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 	adapter: PrismaAdapter(prisma),
 	session: { strategy: "jwt" },
 	pages: { signIn: "/signin" },
-
 	providers: [
 		Credentials({
 			credentials: {
@@ -34,15 +33,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 					const user = await prisma.user.findUnique({
 						where: { email: email },
 					});
+					if (!user) {
+						throw new Error("User not found.");
+					}
+					// verify password
 					const match = await bcrypt.compare(password, user.password);
 					if (!match) {
 						throw new InvalidLoginError("Bitte überprüfe dein Passwort.");
 					}
-					if (!user) {
-						throw new Error("User not found.");
-					}
-					// return json object with the user data
-					console.log(user);
+
 					return user;
 				} catch (error) {
 					console.log(error);
@@ -66,3 +65,26 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 		},
 	},
 });
+
+
+// callbacks: {
+//     session: ({ session, token }) => {
+//       return {
+//         ...session,
+//         user: {
+//           ...session.user,
+//           id: token.id,
+//           randomKey: token.randomKey,
+//         },
+//       };
+//     },
+//     jwt: ({ token, user }) => {
+//       if (user) {
+//         const u = user as unknown as any;
+//         return {
+//           ...token,
+//           id: u.id,
+//           randomKey: u.randomKey,
+//         };
+//       }
+//       return token;
