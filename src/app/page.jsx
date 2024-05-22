@@ -4,7 +4,7 @@ import React from "react";
 export default async function Home() {
 
 	return (
-		<div className="min-h-screen bg-gray-100">
+		<div className=" bg-neutral-100">
 			<main className="container py-8 mx-auto">
 				<div className="grid items-center grid-cols-1 gap-8 md:grid-cols-2">
 					<div>

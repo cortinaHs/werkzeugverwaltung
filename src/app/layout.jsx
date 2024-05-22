@@ -24,12 +24,11 @@ export default async function RootLayout({ children }) {
 	const session = await auth()
 	return (
 		<html lang="en">
-			<body>
+			<body flex flex-col min-h-screen>
 				{/* Layout UI */}
-					 {session?.user ? <HeaderAuthenticated/> : <HeaderNotAuthenticated/>}
-					<main>{children}</main>
-					<Footer />
-
+				{session?.user ? <HeaderAuthenticated /> : <HeaderNotAuthenticated />}
+				<main>{children}</main>
+				<Footer />
 			</body>
 		</html>
 	);

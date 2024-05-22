@@ -30,10 +30,10 @@ export function HeaderNotAuthenticated() {
     ];
     
 	return (
-		<Disclosure as="nav" className="bg-stone-300">
+		<Disclosure as="nav" className="sticky inset-x-0 top-0 bg-stone-300 ">
 			{({ open }) => (
 				<>
-					<div className="px-2 mx-auto max-w-7xl sm:px-6 lg:px-8" >
+					<div className="px-2 mx-auto max-w-7xl sm:px-6 lg:px-8">
 						<div className="relative flex items-center justify-between h-16">
 							<div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
 								{/* Mobile menu button*/}
@@ -74,8 +74,8 @@ export function HeaderNotAuthenticated() {
 									</div>
 								</div>
 							</div>
-                        </div>
-                        </div>
+						</div>
+					</div>
 					<DisclosurePanel className="sm:hidden">
 						<div className="px-2 pt-2 pb-3 space-y-1">
 							{navigation.map((item) => (
