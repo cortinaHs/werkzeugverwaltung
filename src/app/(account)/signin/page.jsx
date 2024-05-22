@@ -5,8 +5,8 @@ import { redirect } from "next/navigation.js";
 
 
 export default async function SignInPage() {
-	const session = auth();
-	if (session?.data) {
+	const session = await auth();
+	if (session?.user) {
 		redirect("/")
 	}
 	

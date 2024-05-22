@@ -1,16 +1,23 @@
-// // `app/page.js` is the UI for the `/` URL
-// export default function Admin() {
-// 	return <h1>Hello, Home page!</h1>;
+// import { useSession } from "next-auth/react";
+ 
+// export default function Page() {
+//   const session = await useSession();
+ 
+//   if (session?.user.role === "admin") {
+//     return <p>You are an admin, welcome!</p>;
+//   }
+ 
+//   return <p>You are not authorized to view this page!</p>;
 // }
 const AdminPage = () => {
     return (
-      <div className="min-h-screen flex flex-col items-center bg-gray-100 p-4">
-        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl">
-          <h1 className="text-3xl font-bold mb-6 text-center">Administration</h1>
+      <div className="flex flex-col items-center min-h-screen p-4 bg-gray-100">
+        <div className="w-full max-w-3xl p-8 bg-white rounded-lg shadow-lg">
+          <h1 className="mb-6 text-3xl font-bold text-center">Administration</h1>
           
           <section className="mb-6">
-            <h2 className="text-2xl font-bold mb-4">Liste aller Benutzer</h2>
-            <ul className="list-disc pl-5 text-gray-700">
+            <h2 className="mb-4 text-2xl font-bold">Liste aller Benutzer</h2>
+            <ul className="pl-5 text-gray-700 list-disc">
               <li className="py-2 border-b border-gray-200">Benutzer 1</li>
               <li className="py-2 border-b border-gray-200">Benutzer 2</li>
               <li className="py-2 border-b border-gray-200">Benutzer 3</li>
@@ -19,8 +26,8 @@ const AdminPage = () => {
           </section>
   
           <section className="mb-6">
-            <h2 className="text-2xl font-bold mb-4">Werkzeugkategorien</h2>
-            <ul className="list-disc pl-5 text-gray-700 mb-4">
+            <h2 className="mb-4 text-2xl font-bold">Werkzeugkategorien</h2>
+            <ul className="pl-5 mb-4 text-gray-700 list-disc">
               <li className="py-2 border-b border-gray-200">Gartengeräte</li>
               <li className="py-2 border-b border-gray-200">Gartenwerkzeug</li>
               {/* Fügen Sie hier die vollständige Liste der Werkzeugkategorien hinzu */}
@@ -28,10 +35,10 @@ const AdminPage = () => {
             <form className="flex space-x-2">
               <input
                 type="text"
-                className="w-full p-2 border border-gray-300 rounded text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Neue Kategorie hinzufügen"
               />
-              <button type="submit" className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">Hinzufügen</button>
+              <button type="submit" className="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600">Hinzufügen</button>
             </form>
           </section>
         </div>

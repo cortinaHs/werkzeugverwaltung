@@ -24,7 +24,7 @@ export default async function RootLayout({ children }) {
 	const session = await auth()
 	return (
 		<html lang="en">
-			<body flex flex-col min-h-screen>
+			<body className= "flex-col flex-auto min-h-screen">
 				{/* Layout UI */}
 				{session?.user ? <HeaderAuthenticated /> : <HeaderNotAuthenticated />}
 				<main>{children}</main>

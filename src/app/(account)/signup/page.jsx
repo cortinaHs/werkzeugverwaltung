@@ -4,8 +4,8 @@ import { auth } from "@/app/auth";
 import Link from "next/link";
 	
 export default async function SignupPage() {
-		const session = auth();
-		if (session?.data) {
+	const session = await auth();
+		if (session?.user) {
 			redirect("/");
 		}
 

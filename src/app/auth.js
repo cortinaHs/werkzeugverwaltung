@@ -48,11 +48,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 					}
 
 				} catch (error) {
-					console.log(error);
 					if (error instanceof ZodError) {
-						// Return `null` to indicate that the credentials are invalid
-						console.log(error.path[0]);
-						return error;
+						return null;
 					}
 				}
 			},
