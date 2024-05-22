@@ -44,10 +44,10 @@ export async function signUp(formState, formData) {
 		throw e;
 	};
 	
-	// await signIn("credentials", {
-	// 	email: email,
-	// 	password: password,
-	// 	redirectTo: "/",
-	// });
+	await signIn("credentials", {
+		email: email,
+		password: password,
+		redirectTo: "/",
+	});
 
 }
