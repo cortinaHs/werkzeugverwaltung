@@ -1,8 +1,14 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import {Footer} from "../components/footer";
+import { Footer } from "../components/footer";
+import { HeaderAuthenticated } from "@/components/headerAuthenticated";
+import { HeaderNotAuthenticated } from "@/components/headerNotAuthenticated";
+import { auth } from "./auth";
+import { revalidatePath } from "next/cache";
+
 
 const inter = Inter({ subsets: ["latin"] });
+
 
 export const metadata = {
 	title: "Neighbortool",
@@ -12,11 +18,15 @@ export const metadata = {
 	}
 };
 
-export default function RootLayout({ children }) {
+
+export default async function RootLayout({ children }) {
+	revalidatePath("/", "layout")
+	const session = await auth()
 	return (
 		<html lang="en">
-      <body>
-        {/* Layout UI */}
+			<body flex flex-col min-h-screen>
+				{/* Layout UI */}
+				{session?.user ? <HeaderAuthenticated /> : <HeaderNotAuthenticated />}
 				<main>{children}</main>
 				<Footer />
 			</body>

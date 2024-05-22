@@ -1,27 +1,26 @@
 -- CreateTable
-CREATE TABLE `User` (
+CREATE TABLE `users` (
     `id` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NULL,
-    `username` VARCHAR(191) NULL,
     `email` VARCHAR(191) NULL,
+    `email_verified` DATETIME(3) NULL,
     `password` VARCHAR(191) NULL,
-    `emailVerified` DATETIME(3) NULL,
     `image` VARCHAR(191) NULL,
+    `role` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
-    UNIQUE INDEX `User_username_key`(`username`),
-    UNIQUE INDEX `User_email_key`(`email`),
+    UNIQUE INDEX `users_email_key`(`email`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Account` (
+CREATE TABLE `accounts` (
     `id` VARCHAR(191) NOT NULL,
-    `userId` VARCHAR(191) NOT NULL,
+    `user_id` VARCHAR(191) NOT NULL,
     `type` VARCHAR(191) NOT NULL,
     `provider` VARCHAR(191) NOT NULL,
-    `providerAccountId` VARCHAR(191) NOT NULL,
+    `provider_account_id` VARCHAR(191) NOT NULL,
     `refresh_token` TEXT NULL,
     `access_token` TEXT NULL,
     `expires_at` INTEGER NULL,
@@ -33,52 +32,37 @@ CREATE TABLE `Account` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
-    UNIQUE INDEX `Account_userId_key`(`userId`),
-    INDEX `Account_userId_idx`(`userId`),
-    UNIQUE INDEX `Account_provider_providerAccountId_key`(`provider`, `providerAccountId`),
+    UNIQUE INDEX `accounts_user_id_key`(`user_id`),
+    INDEX `accounts_user_id_idx`(`user_id`),
+    UNIQUE INDEX `accounts_provider_provider_account_id_key`(`provider`, `provider_account_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Session` (
+CREATE TABLE `sessions` (
     `id` VARCHAR(191) NOT NULL,
-    `sessionToken` VARCHAR(191) NOT NULL,
-    `userId` VARCHAR(191) NOT NULL,
+    `session_token` VARCHAR(191) NOT NULL,
+    `user_id` VARCHAR(191) NOT NULL,
     `expires` DATETIME(3) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
-    UNIQUE INDEX `Session_sessionToken_key`(`sessionToken`),
-    INDEX `Session_userId_idx`(`userId`),
+    UNIQUE INDEX `sessions_session_token_key`(`session_token`),
+    INDEX `sessions_user_id_idx`(`user_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `VerificationToken` (
+CREATE TABLE `verificationtokens` (
     `identifier` VARCHAR(191) NOT NULL,
     `token` VARCHAR(191) NOT NULL,
     `expires` DATETIME(3) NOT NULL,
 
-    UNIQUE INDEX `VerificationToken_identifier_token_key`(`identifier`, `token`)
+    UNIQUE INDEX `verificationtokens_identifier_token_key`(`identifier`, `token`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Authenticator` (
-    `credentialID` VARCHAR(191) NOT NULL,
-    `userId` VARCHAR(191) NOT NULL,
-    `providerAccountId` VARCHAR(191) NOT NULL,
-    `credentialPublicKey` VARCHAR(191) NOT NULL,
-    `counter` INTEGER NOT NULL,
-    `credentialDeviceType` VARCHAR(191) NOT NULL,
-    `credentialBackedUp` BOOLEAN NOT NULL,
-    `transports` VARCHAR(191) NULL,
-
-    UNIQUE INDEX `Authenticator_credentialID_key`(`credentialID`),
-    PRIMARY KEY (`userId`, `credentialID`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `Userdata` (
+CREATE TABLE `userdata` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `first_name` VARCHAR(191) NOT NULL,
     `last_name` VARCHAR(191) NOT NULL,
@@ -92,16 +76,16 @@ CREATE TABLE `Userdata` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Category` (
+CREATE TABLE `categories` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
 
-    UNIQUE INDEX `Category_name_key`(`name`),
+    UNIQUE INDEX `categories_name_key`(`name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Tool` (
+CREATE TABLE `tools` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
     `description` VARCHAR(191) NULL,
@@ -113,7 +97,7 @@ CREATE TABLE `Tool` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Favorite` (
+CREATE TABLE `favorites` (
     `userId` INTEGER NOT NULL,
     `toolId` INTEGER NOT NULL,
 
@@ -121,7 +105,7 @@ CREATE TABLE `Favorite` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Reservation` (
+CREATE TABLE `reservations` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `userId` INTEGER NOT NULL,
     `toolId` INTEGER NOT NULL,
@@ -133,7 +117,7 @@ CREATE TABLE `Reservation` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Notification` (
+CREATE TABLE `notifications` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `userId` INTEGER NOT NULL,
     `reservationId` INTEGER NULL,
@@ -145,7 +129,7 @@ CREATE TABLE `Notification` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Loan` (
+CREATE TABLE `loans` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `reservationId` INTEGER NOT NULL,
     `borrowDate` DATETIME(3) NOT NULL,
@@ -155,37 +139,34 @@ CREATE TABLE `Loan` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
-ALTER TABLE `Account` ADD CONSTRAINT `Account_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `accounts` ADD CONSTRAINT `accounts_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Session` ADD CONSTRAINT `Session_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `sessions` ADD CONSTRAINT `sessions_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Authenticator` ADD CONSTRAINT `Authenticator_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `tools` ADD CONSTRAINT `tools_categoryId_fkey` FOREIGN KEY (`categoryId`) REFERENCES `categories`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Tool` ADD CONSTRAINT `Tool_categoryId_fkey` FOREIGN KEY (`categoryId`) REFERENCES `Category`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `tools` ADD CONSTRAINT `tools_ownerId_fkey` FOREIGN KEY (`ownerId`) REFERENCES `userdata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Tool` ADD CONSTRAINT `Tool_ownerId_fkey` FOREIGN KEY (`ownerId`) REFERENCES `Userdata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `favorites` ADD CONSTRAINT `favorites_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `userdata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Favorite` ADD CONSTRAINT `Favorite_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `Userdata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `favorites` ADD CONSTRAINT `favorites_toolId_fkey` FOREIGN KEY (`toolId`) REFERENCES `tools`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Favorite` ADD CONSTRAINT `Favorite_toolId_fkey` FOREIGN KEY (`toolId`) REFERENCES `Tool`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `reservations` ADD CONSTRAINT `reservations_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `userdata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Reservation` ADD CONSTRAINT `Reservation_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `Userdata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `reservations` ADD CONSTRAINT `reservations_toolId_fkey` FOREIGN KEY (`toolId`) REFERENCES `tools`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Reservation` ADD CONSTRAINT `Reservation_toolId_fkey` FOREIGN KEY (`toolId`) REFERENCES `Tool`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `notifications` ADD CONSTRAINT `notifications_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `userdata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Notification` ADD CONSTRAINT `Notification_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `Userdata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `notifications` ADD CONSTRAINT `notifications_reservationId_fkey` FOREIGN KEY (`reservationId`) REFERENCES `reservations`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Notification` ADD CONSTRAINT `Notification_reservationId_fkey` FOREIGN KEY (`reservationId`) REFERENCES `Reservation`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `Loan` ADD CONSTRAINT `Loan_reservationId_fkey` FOREIGN KEY (`reservationId`) REFERENCES `Reservation`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `loans` ADD CONSTRAINT `loans_reservationId_fkey` FOREIGN KEY (`reservationId`) REFERENCES `reservations`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

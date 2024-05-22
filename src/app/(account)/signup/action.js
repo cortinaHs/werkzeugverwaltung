@@ -1,8 +1,6 @@
 "use server";
-import { SignupFormSchema } from "../lib/zod";
-import { prisma } from "../lib/prisma";
-import { createSession } from "../lib/sessions";
-import { middleware } from "../middleware";
+import { SignupFormSchema } from "../../lib/zod";
+import { prisma } from "../../lib/prisma";
 const bcrypt = require("bcrypt");
 const { Prisma } = require("@prisma/client");
 
@@ -32,7 +30,6 @@ export async function signUp(formState, formData) {
 				password: hashedPassword,
 			},
 		});
-		// middleware(formData)
 	} catch (e) {
 		// handle unique email constraint
 		if (e instanceof Prisma.PrismaClientKnownRequestError) {
