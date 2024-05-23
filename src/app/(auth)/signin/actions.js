@@ -9,7 +9,7 @@ export async function authenticate(prevState, formData) {
 		await signIn("credentials", {
 			email: formData.get("email"),
 			password: formData.get("password"),
-			redirectTo: "/",
+			redirectTo: "/search",
 		});
 	} catch (error) {
 		console.log(error)

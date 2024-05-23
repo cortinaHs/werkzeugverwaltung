@@ -22,7 +22,7 @@ function classNames(...classes) {
 	return classes.filter(Boolean).join(" ");
 }
 
-export function HeaderNotAuthenticated() {
+export function NavNotAuthenticated() {
 
     const navigation = [
 	{ name: "Anmelden", href: "/signin", current: false },
