@@ -1,7 +1,13 @@
-
+import { redirect } from "next/navigation";
+import { auth } from "./auth";
 import React from "react";
 
 export default async function Home() {
+
+	const session = await auth()
+	if (session) {
+		redirect("/search")
+	}
 
 	return (
 		<div className=" bg-neutral-100">

@@ -1,38 +1,56 @@
-export function searchField() {
+"use client";
+import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
+
+export function SearchField() {
+	const searchParams = useSearchParams();
+	const pathname = usePathname();
+	const { replace } = useRouter();
+
+	function handleSearch(term) {
+		const params = new URLSearchParams(searchParams);
+		if (term === null) {
+			params.set("")
+		}
+		if (term) {
+			params.set("query", term);
+		} else {
+			params.delete("query");
+		} 
+		replace(`${pathname}?${params.toString()}`);
+	}
+
+
 	return (
-		<div>
-			<label
-				htmlFor="price"
-				className="block text-sm font-medium leading-6 text-gray-900"
-			>
-				Price
-			</label>
-			<div className="relative mt-2 rounded-md shadow-sm">
-				<div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-					<span className="text-gray-500 sm:text-sm">$</span>
-				</div>
-				<input
-					type="text"
-					name="price"
-					id="price"
-					className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-					placeholder="0.00"
-				/>
-				<div className="absolute inset-y-0 right-0 flex items-center">
-					<label htmlFor="currency" className="sr-only">
-						Currency
-					</label>
-					<select
-						id="currency"
-						name="currency"
-						className="h-full py-0 pl-2 text-gray-500 bg-transparent border-0 rounded-md pr-7 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
-					>
-						<option>USD</option>
-						<option>CAD</option>
-						<option>EUR</option>
-					</select>
-				</div>
+		<div className="relative mt-2 rounded-md shadow-sm">
+			<div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+				<MagnifyingGlassIcon className="w-3 h-3" />
 			</div>
+			<input
+				type="text"
+				name="searchparams"
+				id="searchparams"
+				className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
+				placeholder="Suche"
+				onChange={(e) => {
+					handleSearch(e.target.value);
+				}}
+				defaultValue={searchParams.get("query")?.toString()}
+			/>
+			<div className="absolute inset-y-0 right-0 flex items-center">
+				<label htmlFor="search" className="sr-only">
+					Suche
+				</label>
+			</div>
+
+			<button
+				className="absolute inset-y-0 flex items-center pl-3 pointer-events-auto right-3"
+				onClick={(e) => {
+					handleSearch(null);
+				}}
+			>
+				<XMarkIcon className="w-3 h-3" />
+			</button>
 		</div>
 	);
 }

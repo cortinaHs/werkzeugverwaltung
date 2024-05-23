@@ -27,7 +27,7 @@ export function NavAuthenticated() {
 	});
 
 	return (
-		<Disclosure as="nav" className="bg-stone-300 ">
+		<Disclosure as="nav" className="fixed inset-x-0 top-0 z-10 bg-stone-300">
 			{({ open }) => (
 				<>
 					<div className="px-2 mx-auto max-w-7xl sm:px-6 lg:px-8">

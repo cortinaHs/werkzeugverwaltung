@@ -1,10 +1,11 @@
 "use client"
 import { ToolGrid } from "../../components/toolgrid";
-import { searchField } from "@/components/searchField";
+import { SearchField } from "@/components/searchField";
 import { Fragment, useState } from 'react'
 import { Dialog, DialogPanel, DisclosurePanel, Disclosure, DisclosureButton, Menu, MenuButton, MenuItems, MenuItem, Transition, TransitionChild } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon } from '@heroicons/react/20/solid'
+import { useSearchParams } from "next/navigation";
 
 const sortOptions = [
   { name: 'Neueste', href: '#', current: false },
@@ -20,7 +21,8 @@ function classNames(...classes) {
 
 export function SearchFilter({categories, tools}) {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
-    
+
+
 
   return (
 		<div className="bg-white">
@@ -69,8 +71,9 @@ export function SearchFilter({categories, tools}) {
 									</div>
 
 									{/* Filters */}
-                                  <form className="mt-4 border-t border-gray-200">
-                                      <searchField />
+								  <form className="mt-4 border-t border-gray-200">
+									  <div className="px-2"><SearchField  /></div>
+										
 										<h3 className="sr-only">Kategorien</h3>
 										<ul
 											role="list"
@@ -84,63 +87,6 @@ export function SearchFilter({categories, tools}) {
 												</li>
 											))}
 										</ul>
-
-										
-											<Disclosure
-												as="div"
-												className="px-4 py-6 border-t border-gray-200"
-											>
-												{({ open }) => (
-													<>
-														<h3 className="flow-root -mx-2 -my-3">
-															<DisclosureButton className="flex items-center justify-between w-full px-2 py-3 text-gray-400 bg-white hover:text-gray-500">
-																<span className="font-medium text-gray-900">
-																	Kategorien
-																</span>
-																<span className="flex items-center ml-6">
-																	{open ? (
-																		<MinusIcon
-																			className="w-5 h-5"
-																			aria-hidden="true"
-																		/>
-																	) : (
-																		<PlusIcon
-																			className="w-5 h-5"
-																			aria-hidden="true"
-																		/>
-																	)}
-																</span>
-															</DisclosureButton>
-														</h3>
-														<DisclosurePanel className="pt-6">
-															<div className="space-y-6">
-																{section.options.map((option, optionIdx) => (
-																	<div
-																		key={option.value}
-																		className="flex items-center"
-																	>
-																		<input
-																			id={`filter-mobile-${section.id}-${optionIdx}`}
-																			name={`${section.id}[]`}
-																			defaultValue={option.value}
-																			type="checkbox"
-																			defaultChecked={option.checked}
-																			className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-																		/>
-																		<label
-																			htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
-																			className="flex-1 min-w-0 ml-3 text-gray-500"
-																		>
-																			{option.label}
-																		</label>
-																	</div>
-																))}
-															</div>
-														</DisclosurePanel>
-													</>
-												)}
-											</Disclosure>
-										{/* ))} */}
 									</form>
 								</DialogPanel>
 							</TransitionChild>
@@ -149,7 +95,7 @@ export function SearchFilter({categories, tools}) {
 				</Transition>
 
 				<main className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-					<div className="flex items-baseline justify-between pt-24 pb-6 border-b border-gray-200">
+					<div className="flex items-baseline justify-between pt-24 pb-6 border-b border-gray-200 ">
 						<h1 className="text-4xl font-bold tracking-tight text-gray-900">
 							Gartengeräte und Werkzeuge
 						</h1>
@@ -211,14 +157,14 @@ export function SearchFilter({categories, tools}) {
 						</div>
 					</div>
 
-					<section aria-labelledby="products-heading" className="pt-6 pb-24">
-						<h2 id="products-heading" className="sr-only">
-							Products
-						</h2>
-
+					<section aria-labelledby="tools-heading" className="pt-6 pb-24">
 						<div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-							{/* Filters */}
-							<form className="hidden lg:block">
+							{/* Filter */}
+
+						  <form className="hidden lg:block">
+							  <div className="pb-6 space-y-4 border-b border-gray-200"><SearchField  /></div>
+								
+<br/>
 								<h3 className="sr-only">Kategorien</h3>
 								<ul
 									role="list"
@@ -230,64 +176,6 @@ export function SearchFilter({categories, tools}) {
 										</li>
 									))}
 								</ul>
-
-								{/* {filters.map((section) => (
-									<Disclosure
-										as="div"
-										key={section.id}
-										className="py-6 border-b border-gray-200"
-									>
-										{({ open }) => (
-											<>
-												<h3 className="flow-root -my-3">
-													<DisclosureButton className="flex items-center justify-between w-full py-3 text-sm text-gray-400 bg-white hover:text-gray-500">
-														<span className="font-medium text-gray-900">
-															{section.name}
-														</span>
-														<span className="flex items-center ml-6">
-															{open ? (
-																<MinusIcon
-																	className="w-5 h-5"
-																	aria-hidden="true"
-																/>
-															) : (
-																<PlusIcon
-																	className="w-5 h-5"
-																	aria-hidden="true"
-																/>
-															)}
-														</span>
-													</DisclosureButton>
-												</h3>
-												<DisclosurePanel className="pt-6">
-													<div className="space-y-4">
-														{section.options.map((option, optionIdx) => (
-															<div
-																key={option.value}
-																className="flex items-center"
-															>
-																<input
-																	id={`filter-${section.id}-${optionIdx}`}
-																	name={`${section.id}[]`}
-																	defaultValue={option.value}
-																	type="checkbox"
-																	defaultChecked={option.checked}
-																	className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-																/>
-																<label
-																	htmlFor={`filter-${section.id}-${optionIdx}`}
-																	className="ml-3 text-sm text-gray-600"
-																>
-																	{option.label}
-																</label>
-															</div>
-														))}
-													</div>
-												</DisclosurePanel>
-											</>
-										)}
-									</Disclosure>
-								))} */}
 							</form>
 
 							{/* Product grid */}
