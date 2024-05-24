@@ -1,35 +1,25 @@
-// "use client"
-// import React, { useState } from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import 'tailwindcss/tailwind.css'; // Import von Tailwind CSS
 
-// const ToolManagementPage = () => {
-//     const [toolName, setToolName] = useState('');
-//     const [category, setCategory] = useState('');
-//     const [photo, setPhoto] = useState(null);
-//     const [tools, setTools] = useState([]);
+const ToolManagementPage = () => {
+    const { register, handleSubmit, reset, watch } = useForm();
+    const [tools, setTools] = React.useState([]);
+    
+    // Funktion zum Verarbeiten der Formularübermittlung
+    const onSubmit = (data) => {
+        const newTool = {
+            ...data,
+            owner: 'CurrentUser' // Platzhalter für den aktuellen Benutzer, kann durch die tatsächliche Benutzer-ID ersetzt werden
+        };
+        setTools([...tools, newTool]);
+        reset(); // Formular zurücksetzen
+        // Hier können Sie die neuen Werkzeugdaten an Ihr Backend zur Speicherung senden
+        // Der Einfachheit halber fügen wir es nur dem lokalen Zustand hinzu
+    };
 
-//     const handleToolNameChange = (e) => {
-//         setToolName(e.target.value);
-//     };
-
-//     const handleCategoryChange = (e) => {
-//         setCategory(e.target.value);
-//     };
-
-//     const handlePhotoChange = (e) => {
-//         setPhoto(e.target.files[0]);
-//     };
-
-//     const handleRegisterTool = () => {
-//         const newTool = {
-//             name: toolName,
-//             category: category,
-//             photo: photo,
-//             owner: 'CurrentUser' // Placeholder for the current user, you may replace it with the actual user ID
-//         };
-//         setTools([...tools, newTool]);
-//         // Here you can send the new tool data to your backend for storage
-//         // For simplicity, we're just adding it to the local state
-//     };
+    // Überwachung des Foto-Uploads
+    const watchPhoto = watch('photo');
 
 //     return (
 //         <div>
@@ -69,54 +59,59 @@
 
 const GeraetRegistrierungPage = () => {
     return (
-      <div className="flex items-center justify-center min-h-screen p-4 bg-gray-100">
-        <div className="w-full max-w-lg p-8 bg-white rounded-lg shadow-lg">
-          <h1 className="mb-6 text-2xl font-bold text-center">Gerät registrieren</h1>
-          <form>
-            <div className="mb-4">
-              <label htmlFor="bezeichnung" className="block mb-2 text-gray-700">Bezeichnung</label>
-              <input
-                type="text"
-                id="bezeichnung"
-                className="w-full p-2 text-gray-900 border border-gray-300 rounded"
-                required
-              />
+        <div className="container p-4 mx-auto">
+            <h1 className="mb-4 text-2xl font-bold">Werkzeugverwaltung</h1>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <div className="flex flex-col">
+                    <label htmlFor="toolName" className="mb-2">Bezeichnung des Geräts:</label>
+                    <input
+                        type="text"
+                        id="toolName"
+                        {...register('toolName')}
+                        className="p-2 border border-gray-300 rounded"
+                    />
+                </div>
+                <div className="flex flex-col">
+                    <label htmlFor="category" className="mb-2">Werkzeugkategorie:</label>
+                    <input
+                        type="text"
+                        id="category"
+                        {...register('category')}
+                        className="p-2 border border-gray-300 rounded"
+                    />
+                </div>
+                <div className="flex flex-col">
+                    <label htmlFor="photo" className="mb-2">Foto des Geräts (optional):</label>
+                    <input
+                        type="file"
+                        id="photo"
+                        {...register('photo')}
+                        className="p-2 border border-gray-300 rounded"
+                    />
+                </div>
+                <button type="submit" className="p-2 text-white bg-blue-500 rounded">Gerät registrieren</button>
+            </form>
+            <div className="mt-8">
+                <h2 className="text-xl font-bold">Registrierte Geräte:</h2>
+                <ul className="space-y-4">
+                    {tools.map((tool, index) => (
+                        <li key={index} className="p-4 border border-gray-300 rounded">
+                            <div className="font-bold">{tool.toolName}</div>
+                            <div>{tool.category}</div>
+                            {tool.photo && (
+                                <img
+                                    src={URL.createObjectURL(tool.photo[0])}
+                                    alt="Gerätefoto"
+                                    className="mt-2 max-h-40"
+                                />
+                            )}
+                            <div>Besitzer: {tool.owner}</div>
+                        </li>
+                    ))}
+                </ul>
             </div>
-            <div className="mb-4">
-              <label htmlFor="foto" className="block mb-2 text-gray-700">Foto (optional)</label>
-              <input
-                type="file"
-                id="foto"
-                className="w-full p-2 text-gray-900 border border-gray-300 rounded"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="kategorie" className="block mb-2 text-gray-700">Werkzeugkategorie</label>
-              <select
-                id="kategorie"
-                className="w-full p-2 text-gray-900 border border-gray-300 rounded"
-                required
-              >
-                <option value="" className="text-gray-500">Kategorie auswählen</option>
-                <option value="Gartengeräte">Gartengeräte</option>
-                <option value="Gartenwerkzeug">Gartenwerkzeug</option>
-              </select>
-            </div>
-            <div className="mb-6">
-              <label htmlFor="besitzer" className="block mb-2 text-gray-700">Besitzer (User)</label>
-              <input
-                type="text"
-                id="besitzer"
-                className="w-full p-2 text-gray-900 border border-gray-300 rounded"
-                required
-              />
-            </div>
-            <button type="submit" className="w-full py-2 text-white bg-blue-500 rounded hover:bg-blue-600">Registrieren</button>
-          </form>
         </div>
-      </div>
     );
-  };
-  
-  export default GeraetRegistrierungPage;
-  
+};
+
+export default ToolManagementPage;
