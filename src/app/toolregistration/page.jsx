@@ -69,32 +69,32 @@
 
 const GeraetRegistrierungPage = () => {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
-          <h1 className="text-2xl font-bold mb-6 text-center">Gerät registrieren</h1>
+      <div className="flex items-center justify-center min-h-screen p-4 bg-gray-100">
+        <div className="w-full max-w-lg p-8 bg-white rounded-lg shadow-lg">
+          <h1 className="mb-6 text-2xl font-bold text-center">Gerät registrieren</h1>
           <form>
             <div className="mb-4">
-              <label htmlFor="bezeichnung" className="block text-gray-700 mb-2">Bezeichnung</label>
+              <label htmlFor="bezeichnung" className="block mb-2 text-gray-700">Bezeichnung</label>
               <input
                 type="text"
                 id="bezeichnung"
-                className="w-full p-2 border border-gray-300 rounded text-gray-900"
+                className="w-full p-2 text-gray-900 border border-gray-300 rounded"
                 required
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="foto" className="block text-gray-700 mb-2">Foto (optional)</label>
+              <label htmlFor="foto" className="block mb-2 text-gray-700">Foto (optional)</label>
               <input
                 type="file"
                 id="foto"
-                className="w-full p-2 border border-gray-300 rounded text-gray-900"
+                className="w-full p-2 text-gray-900 border border-gray-300 rounded"
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="kategorie" className="block text-gray-700 mb-2">Werkzeugkategorie</label>
+              <label htmlFor="kategorie" className="block mb-2 text-gray-700">Werkzeugkategorie</label>
               <select
                 id="kategorie"
-                className="w-full p-2 border border-gray-300 rounded text-gray-900"
+                className="w-full p-2 text-gray-900 border border-gray-300 rounded"
                 required
               >
                 <option value="" className="text-gray-500">Kategorie auswählen</option>
@@ -103,15 +103,15 @@ const GeraetRegistrierungPage = () => {
               </select>
             </div>
             <div className="mb-6">
-              <label htmlFor="besitzer" className="block text-gray-700 mb-2">Besitzer (User)</label>
+              <label htmlFor="besitzer" className="block mb-2 text-gray-700">Besitzer (User)</label>
               <input
                 type="text"
                 id="besitzer"
-                className="w-full p-2 border border-gray-300 rounded text-gray-900"
+                className="w-full p-2 text-gray-900 border border-gray-300 rounded"
                 required
               />
             </div>
-            <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Registrieren</button>
+            <button type="submit" className="w-full py-2 text-white bg-blue-500 rounded hover:bg-blue-600">Registrieren</button>
           </form>
         </div>
       </div>
