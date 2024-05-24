@@ -1,30 +1,59 @@
-"use client"
+"use client";
 import { ToolGrid } from "../../components/toolgrid";
 import { SearchField } from "@/components/searchField";
-import { Fragment, useState } from 'react'
-import { Dialog, DialogPanel, DisclosurePanel, Disclosure, DisclosureButton, Menu, MenuButton, MenuItems, MenuItem, Transition, TransitionChild } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon } from '@heroicons/react/20/solid'
-import { useSearchParams } from "next/navigation";
+import { Fragment, useState } from "react";
+import {
+	Dialog,
+	DialogPanel,
+	Menu,
+	MenuButton,
+	MenuItems,
+	MenuItem,
+	Transition,
+	TransitionChild,
+	Checkbox,
+	Label,
+	Field,
+	Radio,
+	RadioGroup,
+} from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/20/solid";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
 const sortOptions = [
-  { name: 'Neueste', href: '#', current: false },
-  { name: 'Name A-Z', href: '#', current: false },
-  { name: 'Name Z-A', href: '#', current: false },
-]
-
+	{ name: "Neueste", href: "#", current: false },
+	{ name: "Name A-Z", href: "#", current: false },
+	{ name: "Name Z-A", href: "#", current: false },
+];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+	return classes.filter(Boolean).join(" ");
 }
 
+export function SearchFilter({ categories, tools }) {
+	const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+	const [categoryFilter, setCategoryFilter] = useState(null);
+	const [enabled, setEnabled] = useState(false); 
+	const [selected, setSelected] = useState(null);
 
-export function SearchFilter({categories, tools}) {
-    const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+	const searchParams = useSearchParams();
+	const pathname = usePathname();
+	const { replace } = useRouter();
 
+	function handleFilters(category) {
+		const params = new URLSearchParams(searchParams);
 
+		if (category === categoryFilter) {
+			params.delete("category", category);
+			setCategoryFilter(null);
+		} else {
+			params.set("category", category);
+		}
 
-  return (
+		replace(`${pathname}?${params.toString()}`);
+	}
+	return (
 		<div className="bg-white">
 			<div>
 				{/* Mobile filter dialog */}
@@ -71,9 +100,11 @@ export function SearchFilter({categories, tools}) {
 									</div>
 
 									{/* Filters */}
-								  <form className="mt-4 border-t border-gray-200">
-									  <div className="px-2"><SearchField  /></div>
-										
+									<form className="mt-4 border-t border-gray-200">
+										<div className="px-2">
+											<SearchField />
+										</div>
+
 										<h3 className="sr-only">Kategorien</h3>
 										<ul
 											role="list"
@@ -161,21 +192,94 @@ export function SearchFilter({categories, tools}) {
 						<div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
 							{/* Filter */}
 
-						  <form className="hidden lg:block">
-							  <div className="pb-6 space-y-4 border-b border-gray-200"><SearchField  /></div>
-								
-<br/>
-								<h3 className="sr-only">Kategorien</h3>
+							<form className="hidden lg:block">
+								<div className="pb-6 space-y-4 border-b border-gray-200">
+									<SearchField />
+								</div>
+
+								<br />
+								{/* <h3 className="sr-only">Kategorien</h3>
 								<ul
 									role="list"
-									className="pb-6 space-y-4 text-sm font-medium text-gray-900 border-b border-gray-200"
+									className="pb-6 space-y-4 text-sm text-gray-900 border-b border-gray-200"
 								>
 									{categories.map((category) => (
 										<li key={category.name}>
-											<a href={category.href}>{category.name}</a>
+											<button
+												type="button"
+												onClick={() => {
+													setCategoryFilter(category.name);
+													handleFilters(category.name);
+												}}
+											>
+												{categoryFilter == category.name ? (
+													<p className="fond-bold">{category.name}</p>
+												) : (
+													<p className="fond-meldium">{category.name}</p>
+												)}
+											</button>
 										</li>
 									))}
-								</ul>
+								</ul> */}
+								<div className="w-full">
+									<div className="w-full max-w-md mx-auto">
+										<RadioGroup
+											by="name"
+											value={selected}
+											onChange={setSelected}
+											aria-label="Server size"
+											className="space-y-2"
+										>
+											{categories.map((category) => (
+												<Radio
+													key={category.name}
+													value={category}
+													className="group relative flex cursor-pointer rounded-lg bg-green/5   transition focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white data-[checked]:bg-white/10 data-[checked]:font-semibold"
+												>
+													<div className="flex items-center justify-between w-full">
+														<div className="text-sm/6">
+															<button
+																type="button"
+																onClick={() => {
+																	setCategoryFilter(category.name);
+																	handleFilters(category.name);
+																}}
+															>
+																<p className="text-sm text-gray-900">
+																	{category.name}
+																</p>
+															</button>
+														</div>
+													</div>
+												</Radio>
+												
+											))}<Radio>clear</Radio>
+										</RadioGroup>
+									</div>
+								</div>
+								<div className="pb-6 space-y-4 border-b border-gray-200">
+									<Field className="flex items-center gap-2">
+										<Checkbox
+											checked={enabled}
+											onChange={setEnabled}
+											className="group block size-4 rounded border bg-white data-[checked]:bg-blue-500"
+										>
+											<svg
+												className="stroke-white opacity-0 group-data-[checked]:opacity-100"
+												viewBox="0 0 14 14"
+												fill="none"
+											>
+												<path
+													d="M3 8L6 11L11 3.5"
+													strokeWidth={2}
+													strokeLinecap="round"
+													strokeLinejoin="round"
+												/>
+											</svg>
+										</Checkbox>
+										<Label>Favoriten</Label>
+									</Field>
+								</div>
 							</form>
 
 							{/* Product grid */}

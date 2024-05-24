@@ -3,23 +3,23 @@ import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
 export function SearchField() {
-	const searchParams = useSearchParams();
+	// const searchParams = useSearchParams();
 	const pathname = usePathname();
 	const { replace } = useRouter();
+	const searchParams = useSearchParams();
 
 	function handleSearch(term) {
 		const params = new URLSearchParams(searchParams);
 		if (term === null) {
-			params.set("")
+			params.set("query", "");
 		}
 		if (term) {
 			params.set("query", term);
 		} else {
 			params.delete("query");
-		} 
+		}
 		replace(`${pathname}?${params.toString()}`);
 	}
-
 
 	return (
 		<div className="relative mt-2 rounded-md shadow-sm">
