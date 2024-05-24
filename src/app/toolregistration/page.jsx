@@ -21,6 +21,43 @@ const ToolManagementPage = () => {
     // Überwachung des Foto-Uploads
     const watchPhoto = watch('photo');
 
+//     return (
+//         <div>
+//             <h1>Werkzeugverwaltung</h1>
+//             <div>
+//                 <label htmlFor="toolName">Bezeichnung des Geräts:</label>
+//                 <input type="text" id="toolName" value={toolName} onChange={handleToolNameChange} />
+//             </div>
+//             <div>
+//                 <label htmlFor="category">Werkzeugkategorie:</label>
+//                 <input type="text" id="category" value={category} onChange={handleCategoryChange} />
+//             </div>
+//             <div>
+//                 <label htmlFor="photo">Foto des Geräts (optional):</label>
+//                 <input type="file" id="photo" onChange={handlePhotoChange} />
+//             </div>
+//             <button onClick={handleRegisterTool}>Gerät registrieren</button>
+//             <div>
+//                 <h2>Registrierte Geräte:</h2>
+//                 <ul>
+//                     {tools.map((tool, index) => (
+//                         <li key={index}>
+//                             <div>{tool.name}</div>
+//                             <div>{tool.category}</div>
+//                             {tool.photo && <img src={URL.createObjectURL(tool.photo)} alt="Gerätefoto" />}
+//                             <div>Besitzer: {tool.owner}</div>
+//                         </li>
+//                     ))}
+//                 </ul>
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default ToolManagementPage;
+
+
+const GeraetRegistrierungPage = () => {
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold mb-4">Werkzeugverwaltung</h1>

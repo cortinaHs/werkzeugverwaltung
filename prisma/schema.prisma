@@ -11,21 +11,24 @@ model User {
   id            String          @id @default(cuid())
   name          String?
   email         String?         @unique
+  emailVerified DateTime? @map("email_verified")
   password      String?
   image         String?
+  role          String?
   Session       Session[]
   Account       Account?
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  @@map("users")
 }
  
 model Account {
   id                       String  @id @default(cuid())
-  userId                   String  @unique
+  userId                   String  @unique @map("user_id")
   type                     String
   provider                 String
-  providerAccountId        String
+  providerAccountId        String  @map("provider_account_id")
   refresh_token            String? @db.Text
   access_token             String? @db.Text
   expires_at               Int?
@@ -34,26 +37,28 @@ model Account {
   id_token                 String? @db.Text
   session_state            String?
   refresh_token_expires_in Int?
-  user                     User?   @relation(fields: [userId], references: [id])
+  user                     User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
  
   @@unique([provider, providerAccountId])
   @@index([userId])
+  @@map("accounts")
 }
  
 model Session {
   id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id])
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
  
   @@index([userId])
+  @@map("sessions")
 }
  
 model VerificationToken {
@@ -62,6 +67,7 @@ model VerificationToken {
   expires    DateTime
  
   @@unique([identifier, token])
+  @@map("verificationtokens")
 }
 
 // Das Prisma-Schema
@@ -80,6 +86,8 @@ model Userdata {
     tools        Tool[]
     favorites    Favorite[]
     notifications Notification[]
+
+    @@map("userdata")
 }
 
 model Category {
@@ -88,6 +96,7 @@ model Category {
 
     // Beziehung zu Tool
     tools Tool[]
+    @@map("categories")
 }
 
 model Tool {
@@ -104,6 +113,8 @@ model Tool {
     
     reservations Reservation[]
     favorites    Favorite[]
+
+    @@map("tools")
 }
 
 model Favorite {
@@ -116,6 +127,7 @@ model Favorite {
 
     // Kombinierter Primärschlüssel
     @@id([userId, toolId])
+    @@map("favorites")
 }
 
 model Reservation {
@@ -132,6 +144,8 @@ model Reservation {
 
     notifications Notification[]
     loans Loan[]
+
+    @@map("reservations")
 }
 
 model Notification {
@@ -145,6 +159,8 @@ model Notification {
     // Beziehungen
     user Userdata @relation(fields: [userId], references: [id])
     reservation Reservation? @relation(fields: [reservationId], references: [id])
+
+    @@map("notifications")
 }
 
 model Loan {
@@ -155,5 +171,7 @@ model Loan {
 
     // Beziehung
     reservation Reservation @relation(fields: [reservationId], references: [id])
+
+    @@map("loans")
 }
 
