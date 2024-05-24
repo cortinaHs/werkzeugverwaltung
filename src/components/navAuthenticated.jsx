@@ -4,22 +4,26 @@ import { Disclosure, DisclosureButton, DisclosurePanel, MenuItem, MenuItems, Men
 import { Bars3Icon, BellIcon, XMarkIcon , WrenchScrewdriverIcon} from '@heroicons/react/24/outline'
 import Link from "next/link"
 import { signOut } from 'next-auth/react';
+import { usePathname } from 'next/navigation';
 
 function classNames(...classes) {
 	return classes.filter(Boolean).join(" ");
 }
 
-const navigation = [
-	{ name: "Gerätesuche", href: "/search", current: false },
-	{ name: "Kalender", href: "/calender", current: false },
-	{ name: "Gerät hinzufügen", href: "/addtool", current: false },
-];
 
-export function HeaderAuthenticated() {
 
+export function NavAuthenticated({navigation}) {
+	const pathname = usePathname();
+	navigation.forEach((element) => {
+		if (element.href === pathname) {
+			element.current = true;
+		} else {
+			element.current = false;
+		}
+	});
 
 	return (
-		<Disclosure as="nav" className="bg-stone-300">
+		<Disclosure as="nav" className="fixed inset-x-0 top-0 z-10 bg-stone-300">
 			{({ open }) => (
 				<>
 					<div className="px-2 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -99,7 +103,7 @@ export function HeaderAuthenticated() {
 											<MenuItem>
 												{({ open }) => (
 													<Link
-														href="/profile"
+														href="/userprofile"
 														className={classNames(
 															open ? "bg-gray-100" : "",
 															"block px-4 py-2 text-sm text-gray-700"
@@ -112,13 +116,13 @@ export function HeaderAuthenticated() {
 											<MenuItem>
 												{({ open }) => (
 													<Link
-														href="/settings"
+														href="/tools"
 														className={classNames(
 															open ? "bg-gray-100" : "",
 															"block px-4 py-2 text-sm text-gray-700"
 														)}
 													>
-														Einstellungen
+														Eigene Geräte
 													</Link>
 												)}
 											</MenuItem>

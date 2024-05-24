@@ -14,13 +14,13 @@ export const BASE_PATH = "/api/auth";
 export const { handlers, auth, signIn, signOut } = NextAuth({
 	adapter: PrismaAdapter(prisma),
 	pages: {
-		signIn: '/signin'
+		signIn: "/signin",
 	},
 	providers: [
 		Credentials({
 			credentials: {
-				email: { },
-				password: { },
+				email: {},
+				password: {},
 			},
 
 			// TODO: handle errors with formState
@@ -41,38 +41,42 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 					// verify password
 					const match = await bcrypt.compare(password, user.password);
 					if (match) {
-						return user
-					}
-					else {
+						return user;
+					} else {
 						throw new InvalidLoginError("Bitte überprüfe dein Passwort.");
 					}
-
 				} catch (error) {
-					console.log(error);
 					if (error instanceof ZodError) {
-						// Return `null` to indicate that the credentials are invalid
-						console.log(error.path[0]);
-						return error;
+						return null;
 					}
 				}
 			},
 		}),
 	],
 	session: {
-		strategy: "jwt"
+		strategy: "jwt",
 	},
-	  callbacks: {
-    jwt({ token, user }) {
-      if (user) { // User is available during sign-in
-        token.id = user.id
-      }
-      return token
-    },
-    session({ session, token }) {
-      session.user.id = token.id
-      return session
-    },
-  },
+	callbacks: {
+		jwt({ token, user }) {
+			if (user) {
+				// User is available during sign-in
+				if (user.role) {
+					console.log("got")
+					token.role = user.role
+				}
+				token.id = user.id;
+			}
+			return token;
+		},
+		session({ session, token }) {
+			session.user.id = token.id;
+			if (token.role) {
+				session.user.role = token.role
+			}
+			
+			return session;
+		},
+	},
 	basePath: BASE_PATH,
 	secret: process.env.AUTH_SECRET,
 });

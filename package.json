@@ -18,9 +18,11 @@
 		"next-auth": "^5.0.0-beta.17",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
+		"tailwind-datepicker-react": "^1.4.3",
 		"zod": "^3.23.8"
 	},
 	"devDependencies": {
+		"@tailwindcss/forms": "^0.5.7",
 		"eslint": "^8",
 		"eslint-config-next": "14.2.3",
 		"postcss": "^8",

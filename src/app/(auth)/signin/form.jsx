@@ -7,6 +7,7 @@ import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 export default function SignInForm() {
     const [formState, formAction] = useFormState(authenticate, undefined);
 	const { pending } = useFormStatus();
+	console.log(formState)
     
     return (
 			<form className="space-y-6" method="POST">

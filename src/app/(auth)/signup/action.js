@@ -1,6 +1,8 @@
 "use server";
 import { SignupFormSchema } from "../../lib/zod";
 import { prisma } from "../../lib/prisma";
+import { signIn } from "@/app/auth";
+
 const bcrypt = require("bcrypt");
 const { Prisma } = require("@prisma/client");
 
@@ -34,15 +36,18 @@ export async function signUp(formState, formData) {
 		// handle unique email constraint
 		if (e instanceof Prisma.PrismaClientKnownRequestError) {
 			if (e.code === "P2002") {
-				return {
+				return {	
 					errors: "Es gibt bereits einen Account mit dieser Email.",
 				};
 			}
 		}
 		throw e;
-	}
+	};
 	
-	// TODO:
-	// 4. Create user session
-	// 5. Redirect user
+	await signIn("credentials", {
+		email: email,
+		password: password,
+		redirectTo: "/",
+	});
+
 }
