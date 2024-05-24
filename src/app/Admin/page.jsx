@@ -1,15 +1,13 @@
-// import { useSession } from "next-auth/react";
+import { auth } from "../auth";
  
-// export default function Page() {
-//   const session = await useSession();
+//TODO: DB connetion
+
+export  default async function Admin() {
+  const session = await auth();
  
-//   if (session?.user.role === "admin") {
-//     return <p>You are an admin, welcome!</p>;
-//   }
- 
-//   return <p>You are not authorized to view this page!</p>;
-// }
-const AdminPage = () => {
+  if (session?.user.role != "admin") {
+      redirect("/search")
+}
     return (
       <div className="flex flex-col items-center min-h-screen p-4 bg-gray-100">
         <div className="w-full max-w-3xl p-8 bg-white rounded-lg shadow-lg">
@@ -45,6 +43,3 @@ const AdminPage = () => {
       </div>
     );
   };
-  
-  export default AdminPage;
-  

@@ -1,8 +1,8 @@
 "use client";
 import { ToolGrid } from "../../components/toolgrid";
-import { SearchField } from "@/components/searchField";
-import { CategorySelection } from "@/components/categoryFilters";
-import { SetDate } from "@/components/dateSetter";
+import { SearchField } from "@/components/search/searchField";
+import { CategorySelection } from "@/components/search/categoryFilters";
+import { SetDate } from "@/components/search/dateSetter";
 import { Fragment, useState } from "react";
 import {
 	Dialog,
@@ -30,6 +30,10 @@ const sortOptions = [
 function classNames(...classes) {
 	return classes.filter(Boolean).join(" ");
 }
+
+
+// TODO : sort functionality
+// TODO: select favorites and get from db, make checkbox own component
 
 export function SearchFilter({ categories, tools }) {
 	const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);

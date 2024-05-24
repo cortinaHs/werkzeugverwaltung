@@ -48,28 +48,29 @@ const options = {
 	},
 };
 
+// TODO: fix modal close and deletebutton
+// TODO : filter db for dates
+
 export function SetDate() {
 	const [showFrom, setShowFrom] = useState(false);
 	const [showTo, setShowTo] = useState(false);
 	const [selectedFromDate, setSelectedFromDate] = useState("");
 	const [selectedToDate, setSelectedToDate] = useState("");
 
+	// const ref = useRef();
 	// useEffect(() => {
-	// 	// window.addEventListener("click", (e) => {
-	// 	// 	const target = e.target;
-	// 	// 	if (!document.getElementById(container_id)?.contains(target)) {
-	// 	// 		setShowFrom(false);
-	// 	// 		setShowTo(false);
-	// 	// 	}
-	// 	// 	console.log(target);
-	// 	// });
-	// 	const dp = document.getElementById('dp');
-	// 	dp.addEventListener("", () => {
-	// 				setShowFrom(false);
-	// 				setShowTo(false);
-	// 	})
-		
-	// });
+	// 	const checkIfClickedOutside = (e) => {
+	// 		if (ref.current && !ref.current.contains(e.target)) {
+	// 			onClose();
+	// 		}
+	// 	};
+	// 	document.addEventListener("click", checkIfClickedOutside);
+	// 	return () => {
+	// 		document.removeEventListener("click", checkIfClickedOutside);
+	// 	};
+	// }, [onClose]);
+
+
 
 	const handleChangeFromDate = (selectedFromDate) => {
 		let day = selectedFromDate.getDate();

@@ -17,6 +17,7 @@ export default async function SearchPage({ searchParams }) {
      categoryFilter = [searchParams?.category];
     } 
   
+	//TODO: Add pagination
 		 
 	const currentPage = Number(searchParams?.page) || 1;
 

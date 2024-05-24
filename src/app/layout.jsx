@@ -1,8 +1,8 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Footer } from "../components/footer";
-import { NavAuthenticated } from "@/components/navAuthenticated";
-import { NavNotAuthenticated } from "@/components/navNotAuthenticated";
+import { Footer } from "../components/ui/footer";
+import { NavAuthenticated } from "@/components/ui/navAuthenticated";
+import { NavNotAuthenticated } from "@/components/ui/navNotAuthenticated";
 import { auth } from "./auth";
 import { revalidatePath } from "next/cache";
 
