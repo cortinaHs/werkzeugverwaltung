@@ -1,6 +1,8 @@
 "use client";
 import { ToolGrid } from "../../components/toolgrid";
 import { SearchField } from "@/components/searchField";
+import { CategorySelection } from "@/components/categoryFilters";
+import { SetDate } from "@/components/dateSetter";
 import { Fragment, useState } from "react";
 import {
 	Dialog,
@@ -14,12 +16,10 @@ import {
 	Checkbox,
 	Label,
 	Field,
-	Radio,
-	RadioGroup,
+
 } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/20/solid";
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
 const sortOptions = [
 	{ name: "Neueste", href: "#", current: false },
@@ -33,26 +33,9 @@ function classNames(...classes) {
 
 export function SearchFilter({ categories, tools }) {
 	const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-	const [categoryFilter, setCategoryFilter] = useState(null);
 	const [enabled, setEnabled] = useState(false); 
-	const [selected, setSelected] = useState(null);
 
-	const searchParams = useSearchParams();
-	const pathname = usePathname();
-	const { replace } = useRouter();
 
-	function handleFilters(category) {
-		const params = new URLSearchParams(searchParams);
-
-		if (category === categoryFilter) {
-			params.delete("category", category);
-			setCategoryFilter(null);
-		} else {
-			params.set("category", category);
-		}
-
-		replace(`${pathname}?${params.toString()}`);
-	}
 	return (
 		<div className="bg-white">
 			<div>
@@ -101,23 +84,44 @@ export function SearchFilter({ categories, tools }) {
 
 									{/* Filters */}
 									<form className="mt-4 border-t border-gray-200">
-										<div className="px-2">
+										<div className="px-2 pb-6 space-y-4 text-sm border-b border-gray-200 ">
 											<SearchField />
 										</div>
 
+										<br />
+										<div className="px-2 pb-6 space-y-4 text-sm border-b border-gray-200 ">
+											<Field className="flex items-center gap-2">
+												<Checkbox
+													checked={enabled}
+													onChange={setEnabled}
+													className="group block size-4 rounded border bg-white data-[checked]:bg-blue-500"
+												>
+													<svg
+														className="stroke-white opacity-0 group-data-[checked]:opacity-100"
+														viewBox="0 0 14 14"
+														fill="none"
+													>
+														<path
+															d="M3 8L6 11L11 3.5"
+															strokeWidth={2}
+															strokeLinecap="round"
+															strokeLinejoin="round"
+														/>
+													</svg>
+												</Checkbox>
+												<Label>Favoriten</Label>
+											</Field>
+										</div>
+										<br />
+
 										<h3 className="sr-only">Kategorien</h3>
-										<ul
-											role="list"
-											className="px-2 py-3 font-medium text-gray-900"
-										>
-											{categories.map((category) => (
-												<li key={category.name}>
-													<a href={category.href} className="block px-2 py-3">
-														{category.name}
-													</a>
-												</li>
-											))}
-										</ul>
+										<div className="px-2 pb-6 space-y-4 text-sm border-b border-gray-200 ">
+											<CategorySelection categories={categories} />
+										</div>
+										<br />
+										<div className="px-2 pb-6 space-y-4 text-sm border-b border-gray-200 ">
+											<SetDate />
+										</div>
 									</form>
 								</DialogPanel>
 							</TransitionChild>
@@ -198,66 +202,7 @@ export function SearchFilter({ categories, tools }) {
 								</div>
 
 								<br />
-								{/* <h3 className="sr-only">Kategorien</h3>
-								<ul
-									role="list"
-									className="pb-6 space-y-4 text-sm text-gray-900 border-b border-gray-200"
-								>
-									{categories.map((category) => (
-										<li key={category.name}>
-											<button
-												type="button"
-												onClick={() => {
-													setCategoryFilter(category.name);
-													handleFilters(category.name);
-												}}
-											>
-												{categoryFilter == category.name ? (
-													<p className="fond-bold">{category.name}</p>
-												) : (
-													<p className="fond-meldium">{category.name}</p>
-												)}
-											</button>
-										</li>
-									))}
-								</ul> */}
-								<div className="w-full">
-									<div className="w-full max-w-md mx-auto">
-										<RadioGroup
-											by="name"
-											value={selected}
-											onChange={setSelected}
-											aria-label="Server size"
-											className="space-y-2"
-										>
-											{categories.map((category) => (
-												<Radio
-													key={category.name}
-													value={category}
-													className="group relative flex cursor-pointer rounded-lg bg-green/5   transition focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white data-[checked]:bg-white/10 data-[checked]:font-semibold"
-												>
-													<div className="flex items-center justify-between w-full">
-														<div className="text-sm/6">
-															<button
-																type="button"
-																onClick={() => {
-																	setCategoryFilter(category.name);
-																	handleFilters(category.name);
-																}}
-															>
-																<p className="text-sm text-gray-900">
-																	{category.name}
-																</p>
-															</button>
-														</div>
-													</div>
-												</Radio>
-												
-											))}<Radio>clear</Radio>
-										</RadioGroup>
-									</div>
-								</div>
-								<div className="pb-6 space-y-4 border-b border-gray-200">
+								<div className="pb-6 space-y-4 text-sm border-b border-gray-200">
 									<Field className="flex items-center gap-2">
 										<Checkbox
 											checked={enabled}
@@ -279,6 +224,16 @@ export function SearchFilter({ categories, tools }) {
 										</Checkbox>
 										<Label>Favoriten</Label>
 									</Field>
+								</div>
+								<br />
+								<div className="space-y-4 border-b border-gray-200 w-fullpb-6">
+									<div className="w-full max-w-md mx-auto">
+										<CategorySelection categories={categories} />
+									</div>
+								</div>
+								<br />
+								<div className="pb-6 space-y-4 border-b border-gray-200">
+									<SetDate />
 								</div>
 							</form>
 

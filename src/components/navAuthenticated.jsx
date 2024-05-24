@@ -10,13 +10,9 @@ function classNames(...classes) {
 	return classes.filter(Boolean).join(" ");
 }
 
-const navigation = [
-	{ name: "Gerätesuche", href: "/search", current: false },
-	{ name: "Reservierungen", href: "/reservations", current: false },
-	{ name: "Gerät registrieren", href: "/toolregistration", current: false },
-];
 
-export function NavAuthenticated() {
+
+export function NavAuthenticated({navigation}) {
 	const pathname = usePathname();
 	navigation.forEach((element) => {
 		if (element.href === pathname) {

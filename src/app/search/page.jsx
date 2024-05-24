@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export default async function SearchPage({ searchParams }) {
 	const session = await auth();
 	if (!session) {
-		redirect("/signin");
+    redirect("/signin");
 	}
 	const categories = await prisma.category.findMany();
 	const query = searchParams?.query || "";

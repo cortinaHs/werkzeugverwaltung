@@ -3,7 +3,6 @@ import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
 export function SearchField() {
-	// const searchParams = useSearchParams();
 	const pathname = usePathname();
 	const { replace } = useRouter();
 	const searchParams = useSearchParams();
