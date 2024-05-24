@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY ./package.json package-lock.json* ./
 
+# RUN npm install prisma --save-dev
 RUN npm ci
 
 COPY src ./src

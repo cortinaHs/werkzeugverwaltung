@@ -4,7 +4,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel, MenuItem, MenuItems, Men
 import { Bars3Icon, BellIcon, XMarkIcon , WrenchScrewdriverIcon} from '@heroicons/react/24/outline'
 import Link from "next/link"
 import { signOut } from 'next-auth/react';
-import { usePathname } from 'next/navigation';
+import { redirect, usePathname } from 'next/navigation';
 
 function classNames(...classes) {
 	return classes.filter(Boolean).join(" ");
@@ -129,7 +129,7 @@ export function NavAuthenticated({navigation}) {
 											<MenuItem>
 												{({ open }) => (
 													<button
-														onClick={() => signOut()}
+														onClick={() => { signOut(); redirect("/") }}
 														className={classNames(
 															open ? "bg-gray-100" : "",
 															"block px-4 py-2 text-sm text-gray-700"
