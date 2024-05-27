@@ -1,0 +1,167 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String?         @unique
+  emailVerified DateTime?       @map("email_verified")
+  password      String?
+  image         String?
+  role          String?
+  street        String
+  houseNumber   String
+  postalCode    String
+  placeOfResidence String
+
+  // Beziehungen zu anderen Modellen
+  sessions      Session[]
+  accounts      Account?
+  tools         Tool[]
+  favorites     Favorite[]
+  reservations  Reservation[]
+  notifications Notification[]
+ 
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@map("users")
+}
+ 
+model Account {
+  id                       String  @id @default(cuid())
+  userId                   String  @unique @map("user_id")
+  type                     String
+  provider                 String
+  providerAccountId        String  @map("provider_account_id")
+  refreshToken             String? @db.Text
+  accessToken              String? @db.Text
+  expiresAt                Int?
+  tokenType                String?
+  scope                    String?
+  idToken                  String? @db.Text
+  sessionState             String?
+  refreshTokenExpiresIn    Int?
+  user                     User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+ 
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("accounts")
+}
+ 
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+ 
+  @@index([userId])
+  @@map("sessions")
+}
+ 
+model VerificationToken {
+  identifier  String
+  token       String
+  expires     DateTime
+ 
+  @@unique([identifier, token])
+  @@map("verificationtokens")
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+
+  // Beziehung zu Tool
+  tools Tool[]
+  @@map("categories")
+}
+
+model Tool {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
+  photo       String?
+  categoryId  Int
+  ownerId     String
+  
+  // Beziehungen
+  category Category @relation(fields: [categoryId], references: [id])
+  owner    User     @relation(fields: [ownerId], references: [id])
+  
+  reservations Reservation[]
+  favorites    Favorite[]
+
+  @@map("tools")
+}
+
+model Favorite {
+  userId String
+  toolId Int
+
+  // Beziehungen
+  user User  @relation(fields: [userId], references: [id])
+  tool Tool  @relation(fields: [toolId], references: [id])
+
+  // Kombinierter Primärschlüssel
+  @@id([userId, toolId])
+  @@map("favorites")
+}
+
+model Reservation {
+  id         Int      @id @default(autoincrement())
+  userId     String
+  toolId     Int
+  startDate  DateTime
+  endDate    DateTime
+  confirmed  Boolean  @default(false)
+
+  // Beziehungen
+  user User  @relation(fields: [userId], references: [id])
+  tool Tool  @relation(fields: [toolId], references: [id])
+
+  notifications Notification[]
+  loans Loan[]
+
+  @@map("reservations")
+}
+
+model Notification {
+  id            Int      @id @default(autoincrement())
+  userId        String
+  reservationId Int?
+  type          String
+  message       String
+  createdAt     DateTime @default(now())
+
+  // Beziehungen
+  user User  @relation(fields: [userId], references: [id])
+  reservation Reservation? @relation(fields: [reservationId], references: [id])
+
+  @@map("notifications")
+}
+
+model Loan {
+  id            Int      @id @default(autoincrement())
+  reservationId Int
+  borrowDate    DateTime
+  returnDate    DateTime?
+
+  // Beziehung
+  reservation Reservation @relation(fields: [reservationId], references: [id])
+
+  @@map("loans")
+}
