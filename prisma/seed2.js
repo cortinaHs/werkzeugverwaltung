@@ -5,91 +5,91 @@ const prisma = new PrismaClient();
 // Die Hauptfunktion, die die Seed-Daten einfügt
 async function main() { 
     // Füge einige Benutzer hinzu
-    const user1 = await prisma.userdata.create({
+    const user1 = await prisma.user.create({
         data: {
-            first_name: 'Alice',
-            last_name: 'Smith',
+            name: 'Alice Smith',
+            email: 'alice.smith@example.com',
             street: 'Eckernförder Straße',
-            house_number: '11',
-            postal_code: '24148',
-            place_of_residence: 'Kiel',
+            houseNumber: '11',
+            postalCode: '24148',
+            placeOfResidence: 'Kiel',
         },
     });
 
-    const user2 = await prisma.userdata.create({
+    const user2 = await prisma.user.create({
         data: {
-            first_name: 'Bob',
-            last_name: 'Johnson',
+            name: 'Bob Johnson',
+            email: 'bob.johnson@example.com',
             street: 'Kronshagener Weg',
-            house_number: '7',
-            postal_code: '24148',
-            place_of_residence: 'Kiel',
+            houseNumber: '7',
+            postalCode: '24148',
+            placeOfResidence: 'Kiel',
         },
     });
 
-    const user3 = await prisma.userdata.create({
+    const user3 = await prisma.user.create({
         data: {
-            first_name: 'Charlie',
-            last_name: 'Brown',
+            name: 'Charlie Brown',
+            email: 'charlie.brown@example.com',
             street: 'Schützenwall',
-            house_number: '19',
-            postal_code: '24148',
-            place_of_residence: 'Kiel',        
+            houseNumber: '19',
+            postalCode: '24148',
+            placeOfResidence: 'Kiel',        
         },
     });
 
-    const user4 = await prisma.userdata.create({
+    const user4 = await prisma.user.create({
         data: {
-            first_name: 'Dave',
-            last_name: 'Williams',
+            name: 'Dave Williams',
+            email: 'dave.williams@example.com',
             street: 'Ringstraße',
-            house_number: '9',
-            postal_code: '24148',
-            place_of_residence: 'Kiel',       
+            houseNumber: '9',
+            postalCode: '24148',
+            placeOfResidence: 'Kiel',       
         },
     });
 
-    const user5 = await prisma.userdata.create({
+    const user5 = await prisma.user.create({
         data: {
-            first_name: 'Eve',
-            last_name: 'Adams',
+            name: 'Eve Adams',
+            email: 'eve.adams@example.com',
             street: 'Hopfenstraße',
-            house_number: '72',
-            postal_code: '24148',
-            place_of_residence: 'Kiel',       
+            houseNumber: '72',
+            postalCode: '24148',
+            placeOfResidence: 'Kiel',       
         },
     });
 
-    const user6 = await prisma.userdata.create({
+    const user6 = await prisma.user.create({
         data: {
-            first_name: 'Fiona',
-            last_name: 'White',
+            name: 'Fiona White',
+            email: 'fiona.white@example.com',
             street: 'Fockstraße',
-            house_number: '64',
-            postal_code: '24148',
-            place_of_residence: 'Kiel',        
+            houseNumber: '64',
+            postalCode: '24148',
+            placeOfResidence: 'Kiel',        
         },
     });
 
-    const user7 = await prisma.userdata.create({
+    const user7 = await prisma.user.create({
         data: {
-            first_name: 'George',
-            last_name: 'Martin',
+            name: 'George Martin',
+            email: 'george.martin@example.com',
             street: 'Weberstraße',
-            house_number: '4',
-            postal_code: '24148',
-            place_of_residence: 'Kiel', 
+            houseNumber: '4',
+            postalCode: '24148',
+            placeOfResidence: 'Kiel', 
         },
     });
 
-    const user8 = await prisma.userdata.create({
+    const user8 = await prisma.user.create({
         data: {
-            first_name: 'Hannah',
-            last_name: 'Wilson',
+            name: 'Hannah Wilson',
+            email: 'hannah.wilson@example.com',
             street: 'Werfststraße',
-            house_number: '27',
-            postal_code: '24148',
-            place_of_residence: 'Kiel',
+            houseNumber: '27',
+            postalCode: '24148',
+            placeOfResidence: 'Kiel',
         },
     });
 

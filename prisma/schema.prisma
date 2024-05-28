@@ -79,7 +79,6 @@ model Userdata {
     house_number  String
     postal_code  String
     place_of_residence  String
-    isAdmin  Boolean @default(false)
 
     // Beziehung zu Reservation und Tool
     reservations Reservation[]

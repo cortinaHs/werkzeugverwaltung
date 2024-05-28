@@ -1,10 +1,15 @@
 import { auth } from "../auth";
+import { redirect } from "next/navigation";
  
 //TODO: DB connetion
 
 export  default async function Admin() {
   const session = await auth();
- 
+  
+	if (!session) {
+		redirect("/signin");
+	}
+
   if (session?.user.role != "admin") {
       redirect("/search")
 }
