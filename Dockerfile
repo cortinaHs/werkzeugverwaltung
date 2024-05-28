@@ -21,3 +21,5 @@ RUN chmod +x /usr/local/bin/docker-entrypoint
 ENTRYPOINT ["docker-entrypoint"]
 
 CMD ["npm", "run", "dev"]
+
+
