@@ -123,7 +123,7 @@ async function main() {
         data: {
             name: 'Fliesenschneider',
             description: 'Der Fliesenschneider schneidet alle Mosaik-, Wand- und Bodenfliesen.',
-            photo: 'https://www.publicdomainpictures.net/pictures/270000/nahled/tile-cutter.jpg',
+            photo: 'https://upload.wikimedia.org/wikipedia/commons/f/fb/Fliesenschneider-HighLine.jpg',
             categoryId: category1.id,
             ownerId: user1.id,
         },
@@ -181,8 +181,8 @@ async function main() {
 
     const tool7 = await prisma.tool.create({
         data: {
-            name: 'Häcksler',
-            description: 'Häcksler bis 3 cm Aststärke.',
+            name: 'Schubkarre',
+            description: 'Luftbereifte Schubkarre mit einem Fassungsvermögen von 85 l.',
             photo: 'https://www.publicdomainpictures.net/pictures/270000/nahled/wood-chipper.jpg',
             categoryId: category2.id,
             ownerId: user4.id,
@@ -191,8 +191,8 @@ async function main() {
 
     const tool8 = await prisma.tool.create({
         data: {
-            name: 'Gartenfräse',
-            description: 'Gartenfräse zum Aufarbeiten von leichten Böden.',
+            name: 'Aufsitzrasenmäher',
+            description: 'Aufsitzrasenmäher mit 80 cm Schnittbreite.',
             photo: 'https://www.publicdomainpictures.net/pictures/270000/nahled/tiller.jpg',
             categoryId: category2.id,
             ownerId: user4.id,

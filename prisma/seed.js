@@ -181,8 +181,8 @@ async function main() {
 
     const tool7 = await prisma.tool.create({
         data: {
-            name: 'Häcksler',
-            description: 'Häcksler bis 3 cm Aststärke.',
+            name: 'Schubkarre',
+            description: 'Luftbereifte Schubkarre mit einem Fassungsvermögen von 85 l.',
             photo: 'häcksler.jpg',
             categoryId: category2.id,
             ownerId: user4.id,
@@ -191,8 +191,8 @@ async function main() {
 
     const tool8 = await prisma.tool.create({
         data: {
-            name: 'Gartenfräse',
-            description: 'Gartenfräse zum Aufarbeiten von leichten Böden.',
+            name: 'Aufsitzrasenmäher',
+            description: 'Aufsitzrasenmäher mit 80 cm Schnittbreite.',
             photo: 'gartenfräse.jpg',
             categoryId: category2.id,
             ownerId: user4.id,
