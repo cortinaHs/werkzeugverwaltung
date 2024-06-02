@@ -7,6 +7,10 @@ CREATE TABLE `users` (
     `password` VARCHAR(191) NULL,
     `image` VARCHAR(191) NULL,
     `role` VARCHAR(191) NULL,
+    `street` VARCHAR(191) NULL,
+    `houseNumber` VARCHAR(191) NULL,
+    `postalCode` VARCHAR(191) NULL,
+    `placeOfResidence` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -21,14 +25,14 @@ CREATE TABLE `accounts` (
     `type` VARCHAR(191) NOT NULL,
     `provider` VARCHAR(191) NOT NULL,
     `provider_account_id` VARCHAR(191) NOT NULL,
-    `refresh_token` TEXT NULL,
-    `access_token` TEXT NULL,
-    `expires_at` INTEGER NULL,
-    `token_type` VARCHAR(191) NULL,
+    `refreshToken` TEXT NULL,
+    `accessToken` TEXT NULL,
+    `expiresAt` INTEGER NULL,
+    `tokenType` VARCHAR(191) NULL,
     `scope` VARCHAR(191) NULL,
-    `id_token` TEXT NULL,
-    `session_state` VARCHAR(191) NULL,
-    `refresh_token_expires_in` INTEGER NULL,
+    `idToken` TEXT NULL,
+    `sessionState` VARCHAR(191) NULL,
+    `refreshTokenExpiresIn` INTEGER NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -62,20 +66,6 @@ CREATE TABLE `verificationtokens` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `userdata` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `first_name` VARCHAR(191) NOT NULL,
-    `last_name` VARCHAR(191) NOT NULL,
-    `street` VARCHAR(191) NOT NULL,
-    `house_number` VARCHAR(191) NOT NULL,
-    `postal_code` VARCHAR(191) NOT NULL,
-    `place_of_residence` VARCHAR(191) NOT NULL,
-    `isAdmin` BOOLEAN NOT NULL DEFAULT false,
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
 CREATE TABLE `categories` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
@@ -91,14 +81,15 @@ CREATE TABLE `tools` (
     `description` VARCHAR(191) NULL,
     `photo` VARCHAR(191) NULL,
     `categoryId` INTEGER NOT NULL,
-    `ownerId` INTEGER NOT NULL,
+    `ownerId` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `favorites` (
-    `userId` INTEGER NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
     `toolId` INTEGER NOT NULL,
 
     PRIMARY KEY (`userId`, `toolId`)
@@ -107,7 +98,7 @@ CREATE TABLE `favorites` (
 -- CreateTable
 CREATE TABLE `reservations` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `userId` INTEGER NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
     `toolId` INTEGER NOT NULL,
     `startDate` DATETIME(3) NOT NULL,
     `endDate` DATETIME(3) NOT NULL,
@@ -119,7 +110,7 @@ CREATE TABLE `reservations` (
 -- CreateTable
 CREATE TABLE `notifications` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `userId` INTEGER NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
     `reservationId` INTEGER NULL,
     `type` VARCHAR(191) NOT NULL,
     `message` VARCHAR(191) NOT NULL,
@@ -148,22 +139,22 @@ ALTER TABLE `sessions` ADD CONSTRAINT `sessions_user_id_fkey` FOREIGN KEY (`user
 ALTER TABLE `tools` ADD CONSTRAINT `tools_categoryId_fkey` FOREIGN KEY (`categoryId`) REFERENCES `categories`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `tools` ADD CONSTRAINT `tools_ownerId_fkey` FOREIGN KEY (`ownerId`) REFERENCES `userdata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `tools` ADD CONSTRAINT `tools_ownerId_fkey` FOREIGN KEY (`ownerId`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `favorites` ADD CONSTRAINT `favorites_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `userdata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `favorites` ADD CONSTRAINT `favorites_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `favorites` ADD CONSTRAINT `favorites_toolId_fkey` FOREIGN KEY (`toolId`) REFERENCES `tools`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `reservations` ADD CONSTRAINT `reservations_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `userdata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `reservations` ADD CONSTRAINT `reservations_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `reservations` ADD CONSTRAINT `reservations_toolId_fkey` FOREIGN KEY (`toolId`) REFERENCES `tools`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `notifications` ADD CONSTRAINT `notifications_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `userdata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `notifications` ADD CONSTRAINT `notifications_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `notifications` ADD CONSTRAINT `notifications_reservationId_fkey` FOREIGN KEY (`reservationId`) REFERENCES `reservations`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

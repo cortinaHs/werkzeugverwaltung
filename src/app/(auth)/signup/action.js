@@ -1,6 +1,6 @@
 "use server";
-import { SignupFormSchema } from "../../lib/zod";
-import { prisma } from "../../lib/prisma";
+import { SignupFormSchema } from "../../../lib/zod";
+import { prisma } from "../../../lib/prisma";
 import { signIn } from "@/app/auth";
 
 const bcrypt = require("bcrypt");
@@ -16,7 +16,6 @@ export async function signUp(formState, formData) {
 	// If any form fields are invalid, return early
 	if (!validatedFields.success) {
 		return {
-			
 			errors: validatedFields.error.flatten().fieldErrors,
 		};
 	}
@@ -36,18 +35,17 @@ export async function signUp(formState, formData) {
 		// handle unique email constraint
 		if (e instanceof Prisma.PrismaClientKnownRequestError) {
 			if (e.code === "P2002") {
-				return {	
+				return {
 					errors: "Es gibt bereits einen Account mit dieser Email.",
 				};
 			}
 		}
 		throw e;
-	};
-	
+	}
+
 	await signIn("credentials", {
 		email: email,
 		password: password,
 		redirectTo: "/",
 	});
-
 }

@@ -2,7 +2,7 @@
 import { ToolGrid } from "../../components/toolgrid";
 import { SearchField } from "@/components/search/searchField";
 import { CategorySelection } from "@/components/search/categoryFilters";
-import { SetDate } from "@/components/search/dateSetter";
+import { DatePickerWithRange } from "@/components/search/dateRangePicker";
 import { Fragment, useState } from "react";
 import {
 	Dialog,
@@ -16,29 +16,39 @@ import {
 	Checkbox,
 	Label,
 	Field,
-
 } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/20/solid";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
 const sortOptions = [
-	{ name: "Neueste", href: "#", current: false },
-	{ name: "Name A-Z", href: "#", current: false },
-	{ name: "Name Z-A", href: "#", current: false },
+	{ name: "Neueste", value: ["createdAtdesc"]},
+	{ name: "Name A-Z", value: ["nameasc"]},
+	{ name: "Name Z-A", value: ["namedesc"]},
 ];
 
 function classNames(...classes) {
 	return classes.filter(Boolean).join(" ");
 }
 
-
 // TODO : sort functionality
 // TODO: select favorites and get from db, make checkbox own component
 
 export function SearchFilter({ categories, tools }) {
 	const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-	const [enabled, setEnabled] = useState(false); 
+	const [enabled, setEnabled] = useState(false);
+	const [sortOption, setSortOption] = useState(undefined);
 
+	const searchParams = useSearchParams();
+	const pathname = usePathname();
+	const { replace } = useRouter();
+
+	function handleSorting(sortOption) {
+		const params = new URLSearchParams(searchParams);
+		params.set("sort", sortOption);
+	
+		replace(`${pathname}?${params.toString()}`);
+	}
 
 	return (
 		<div className="bg-white">
@@ -124,7 +134,7 @@ export function SearchFilter({ categories, tools }) {
 										</div>
 										<br />
 										<div className="px-2 pb-6 space-y-4 text-sm border-b border-gray-200 ">
-											<SetDate />
+											<DatePickerWithRange />
 										</div>
 									</form>
 								</DialogPanel>
@@ -165,10 +175,14 @@ export function SearchFilter({ categories, tools }) {
 											{sortOptions.map((option) => (
 												<MenuItem key={option.name}>
 													{({ open }) => (
-														<a
-															href={option.href}
+														<button
+															type="button"
+															onClick={() => {
+																setSortOption(option.value);
+																handleSorting(option.value);
+															}}
 															className={classNames(
-																option.current
+																option.value === sortOption
 																	? "font-medium text-gray-900"
 																	: "text-gray-500",
 																open ? "bg-gray-100" : "",
@@ -176,7 +190,7 @@ export function SearchFilter({ categories, tools }) {
 															)}
 														>
 															{option.name}
-														</a>
+														</button>
 													)}
 												</MenuItem>
 											))}
@@ -230,14 +244,12 @@ export function SearchFilter({ categories, tools }) {
 									</Field>
 								</div>
 								<br />
-								<div className="space-y-4 border-b border-gray-200 w-fullpb-6">
-									<div className="w-full max-w-md mx-auto">
-										<CategorySelection categories={categories} />
-									</div>
+								<div className="w-full pb-6 space-y-4 border-b border-gray-200">
+									<CategorySelection categories={categories} />
 								</div>
 								<br />
 								<div className="pb-6 space-y-4 border-b border-gray-200">
-									<SetDate />
+									<DatePickerWithRange />
 								</div>
 							</form>
 

@@ -5,91 +5,91 @@ const prisma = new PrismaClient();
 // Die Hauptfunktion, die die Seed-Daten einfügt
 async function main() { 
     // Füge einige Benutzer hinzu
-    const user1 = await prisma.userdata.create({
+    const user1 = await prisma.user.create({
         data: {
-            first_name: 'Alice',
-            last_name: 'Smith',
+            name: 'Alice Smith',
+            email: 'alice.smith@example.com',
             street: 'Eckernförder Straße',
-            house_number: '11',
-            postal_code: '24148',
-            place_of_residence: 'Kiel',
+            houseNumber: '11',
+            postalCode: '24148',
+            placeOfResidence: 'Kiel',
         },
     });
 
-    const user2 = await prisma.userdata.create({
+    const user2 = await prisma.user.create({
         data: {
-            first_name: 'Bob',
-            last_name: 'Johnson',
+            name: 'Bob Johnson',
+            email: 'bob.johnson@example.com',
             street: 'Kronshagener Weg',
-            house_number: '7',
-            postal_code: '24148',
-            place_of_residence: 'Kiel',
+            houseNumber: '7',
+            postalCode: '24148',
+            placeOfResidence: 'Kiel',
         },
     });
 
-    const user3 = await prisma.userdata.create({
+    const user3 = await prisma.user.create({
         data: {
-            first_name: 'Charlie',
-            last_name: 'Brown',
+            name: 'Charlie Brown',
+            email: 'charlie.brown@example.com',
             street: 'Schützenwall',
-            house_number: '19',
-            postal_code: '24148',
-            place_of_residence: 'Kiel',        
+            houseNumber: '19',
+            postalCode: '24148',
+            placeOfResidence: 'Kiel',        
         },
     });
 
-    const user4 = await prisma.userdata.create({
+    const user4 = await prisma.user.create({
         data: {
-            first_name: 'Dave',
-            last_name: 'Williams',
+            name: 'Dave Williams',
+            email: 'dave.williams@example.com',
             street: 'Ringstraße',
-            house_number: '9',
-            postal_code: '24148',
-            place_of_residence: 'Kiel',       
+            houseNumber: '9',
+            postalCode: '24148',
+            placeOfResidence: 'Kiel',       
         },
     });
 
-    const user5 = await prisma.userdata.create({
+    const user5 = await prisma.user.create({
         data: {
-            first_name: 'Eve',
-            last_name: 'Adams',
+            name: 'Eve Adams',
+            email: 'eve.adams@example.com',
             street: 'Hopfenstraße',
-            house_number: '72',
-            postal_code: '24148',
-            place_of_residence: 'Kiel',       
+            houseNumber: '72',
+            postalCode: '24148',
+            placeOfResidence: 'Kiel',       
         },
     });
 
-    const user6 = await prisma.userdata.create({
+    const user6 = await prisma.user.create({
         data: {
-            first_name: 'Fiona',
-            last_name: 'White',
+            name: 'Fiona White',
+            email: 'fiona.white@example.com',
             street: 'Fockstraße',
-            house_number: '64',
-            postal_code: '24148',
-            place_of_residence: 'Kiel',        
+            houseNumber: '64',
+            postalCode: '24148',
+            placeOfResidence: 'Kiel',        
         },
     });
 
-    const user7 = await prisma.userdata.create({
+    const user7 = await prisma.user.create({
         data: {
-            first_name: 'George',
-            last_name: 'Martin',
+            name: 'George Martin',
+            email: 'george.martin@example.com',
             street: 'Weberstraße',
-            house_number: '4',
-            postal_code: '24148',
-            place_of_residence: 'Kiel', 
+            houseNumber: '4',
+            postalCode: '24148',
+            placeOfResidence: 'Kiel', 
         },
     });
 
-    const user8 = await prisma.userdata.create({
+    const user8 = await prisma.user.create({
         data: {
-            first_name: 'Hannah',
-            last_name: 'Wilson',
+            name: 'Hannah Wilson',
+            email: 'hannah.wilson@example.com',
             street: 'Werfststraße',
-            house_number: '27',
-            postal_code: '24148',
-            place_of_residence: 'Kiel',
+            houseNumber: '27',
+            postalCode: '24148',
+            placeOfResidence: 'Kiel',
         },
     });
 
@@ -123,7 +123,7 @@ async function main() {
         data: {
             name: 'Fliesenschneider',
             description: 'Der Fliesenschneider schneidet alle Mosaik-, Wand- und Bodenfliesen.',
-            photo: 'fliesenschneider.jpg',
+            photo: 'https://upload.wikimedia.org/wikipedia/commons/f/fb/Fliesenschneider-HighLine.jpg',
             categoryId: category1.id,
             ownerId: user1.id,
         },
@@ -133,7 +133,7 @@ async function main() {
         data: {
             name: 'Tapeziertisch',
             description: 'Höhenverstellbarer Tapeziertisch.',
-            photo: 'tapeziertisch.jpg',
+            photo: 'https://cdn.pixabay.com/photo/2013/07/06/10/01/wallpaper-143587_1280.jpg',
             categoryId: category1.id,
             ownerId: user1.id,
         },
@@ -143,7 +143,7 @@ async function main() {
         data: {
             name: 'Handkreissäge',
             description: 'Handkreissäge für Schnitte in Holz und anderen Werkstoffen.',
-            photo: 'handkreissäge.jpg',
+            photo: 'https://cdn.pixabay.com/photo/2019/11/13/10/17/skilsaw-5166-4623181_1280.jpg',
             categoryId: category1.id,
             ownerId: user2.id,
         },
@@ -153,7 +153,7 @@ async function main() {
         data: {
             name: 'Schlagbohrmaschine',
             description: 'Schlagbohrmaschine für Bohr- und Schraubarbeiten.',
-            photo: 'schlagbohrmaschine.jpg',
+            photo: 'https://upload.wikimedia.org/wikipedia/commons/f/f0/Hilti_TE70ATC_Schlagbohrmaschine_Netzanschluss.jpg',
             categoryId: category1.id,
             ownerId: user2.id,
         },
@@ -163,7 +163,7 @@ async function main() {
         data: {
             name: 'Heckenschere',
             description: 'Heckenschere für mittlere und mittelstarke Hecken.',
-            photo: 'heckenschere.jpg',
+            photo: 'https://upload.wikimedia.org/wikipedia/commons/a/a2/Makita_UH200DW_10.8V_Cordless_Hedge_Trimmer_%284887706398%29.jpg',
             categoryId: category2.id,
             ownerId: user3.id,
         },
@@ -173,7 +173,7 @@ async function main() {
         data: {
             name: 'Rasenmäher',
             description: 'Rasenmäher mit Schnittbreite von 40 cm.',
-            photo: 'rasenmäher.jpg',
+            photo: 'https://upload.wikimedia.org/wikipedia/commons/7/71/Electric_lawn_mower_IMG_5496.JPG',
             categoryId: category2.id,
             ownerId: user3.id,
         },
@@ -183,7 +183,7 @@ async function main() {
         data: {
             name: 'Schubkarre',
             description: 'Luftbereifte Schubkarre mit einem Fassungsvermögen von 85 l.',
-            photo: 'häcksler.jpg',
+            photo: 'https://upload.wikimedia.org/wikipedia/commons/0/09/Wheelbarrow_1.jpg',
             categoryId: category2.id,
             ownerId: user4.id,
         },
@@ -193,7 +193,7 @@ async function main() {
         data: {
             name: 'Aufsitzrasenmäher',
             description: 'Aufsitzrasenmäher mit 80 cm Schnittbreite.',
-            photo: 'gartenfräse.jpg',
+            photo: 'https://upload.wikimedia.org/wikipedia/commons/9/90/Zitmaaier.JPG',
             categoryId: category2.id,
             ownerId: user4.id,
         },
@@ -203,7 +203,7 @@ async function main() {
         data: {
             name: 'Hochdruckreiniger',
             description: 'Hochdruckreiniger stufenlos einstellbar.',
-            photo: 'hochdruckreiniger.jpg',
+            photo: 'https://upload.wikimedia.org/wikipedia/commons/2/2d/Kawasaki_Pressure_Washer_HPW_302.jpg',
             categoryId: category3.id,
             ownerId: user5.id,
         },
@@ -213,7 +213,7 @@ async function main() {
         data: {
             name: 'Industriestaubsauger',
             description: 'Industriesauger zum Aufsaugen von Holz und Staub.',
-            photo: 'industriestaubsauger.jpg',
+            photo: 'https://upload.wikimedia.org/wikipedia/commons/2/2d/Ruton_vacuum_cleaner_pic2.JPG',
             categoryId: category3.id,
             ownerId: user5.id,
         },
@@ -223,7 +223,7 @@ async function main() {
         data: {
             name: 'Laubsauger',
             description: 'Laubsauger zum Sammeln von Laub.',
-            photo: 'laubsauger.jpg',
+            photo: 'https://upload.wikimedia.org/wikipedia/commons/f/fd/LeafBlowerVac.jpg',
             categoryId: category3.id,
             ownerId: user6.id,
         },
@@ -233,7 +233,7 @@ async function main() {
         data: {
             name: 'Kehrmaschine',
             description: 'Handbetriebene Kehrmaschine mit Doppelwalzen.',
-            photo: 'kehrmaschine.jpg',
+            photo: 'https://upload.wikimedia.org/wikipedia/commons/5/54/Nilfisk_Park_Ranger_2150_street_sweeper_1.jpg',
             categoryId: category3.id,
             ownerId: user6.id,
         },
@@ -243,7 +243,7 @@ async function main() {
         data: {
             name: 'Anhänger',
             description: 'Anhänger mit maximal 400 kg Nutzlast.',
-            photo: 'anhänger.jpg',
+            photo: 'https://upload.wikimedia.org/wikipedia/commons/6/64/Vehicle_-_Diergaarde_Blijdorp_-_Rotterdam_-_Service_trailer_-_with_bamboo.jpg',
             categoryId: category4.id,
             ownerId: user7.id,
         },
@@ -253,7 +253,7 @@ async function main() {
         data: {
             name: 'Mehrzweckleiter',
             description: 'Leiter kann als Anlegeleiter, Schiebeleiter und Stehleiter eingesetzt werden.',
-            photo: 'mehrzweckleiter.jpg',
+            photo: 'https://upload.wikimedia.org/wikipedia/commons/d/dd/Leiter_ladder.jpg',
             categoryId: category4.id,
             ownerId: user7.id,
         },
@@ -263,7 +263,7 @@ async function main() {
         data: {
             name: 'Gabelhubwagen',
             description: 'Gabelhubwagen für den Transport bis zu einem Gewicht von 2,5 Tonnen.',
-            photo: 'gabelhubwagen.jpg',
+            photo: 'https://upload.wikimedia.org/wikipedia/commons/7/7a/Hubwagen.jpg',
             categoryId: category4.id,
             ownerId: user8.id,
         },
@@ -273,7 +273,7 @@ async function main() {
         data: {
             name: 'Sackkarre',
             description: 'Luftbereifte Sackkarre für Lasten bis 200 kg.',
-            photo: 'sackkarre.jpg',
+            photo: 'https://upload.wikimedia.org/wikipedia/commons/5/57/Hand-truck.jpg',
             categoryId: category4.id,
             ownerId: user8.id,
         },

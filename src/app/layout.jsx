@@ -1,13 +1,18 @@
-import { Inter } from "next/font/google";
+import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
-import { Footer } from "../components/ui/footer";
-import { NavAuthenticated } from "@/components/ui/navAuthenticated";
-import { NavNotAuthenticated } from "@/components/ui/navNotAuthenticated";
+import { Footer } from "../components/footer";
+import { NavAuthenticated } from "@/components/navAuthenticated";
+import { NavNotAuthenticated } from "@/components/navNotAuthenticated";
 import { auth } from "./auth";
 import { revalidatePath } from "next/cache";
+import { cn } from "@/lib/utils";
 
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
+const fontSans = FontSans({
+	subsets: ["latin"],
+	variable: "--font-sans",
+});
 
 
 export const metadata = {
@@ -32,10 +37,20 @@ const navigation = [
 		navigation.push({name: "Admintools", href:"/admin", current: false})
 	}
 	return (
-		<html lang="en" className={inter.className}>
-			<body className="h-full">
+		<html lang="en">
+			<body
+				suppressHydrationWarning={true}
+				className={cn(
+					"min-h-screen bg-background font-sans antialiased",
+					fontSans.variable
+				)}
+			>
 				{/* Layout UI */}
-				{session?.user ? <NavAuthenticated navigation={navigation} /> : <NavNotAuthenticated />}
+				{session?.user ? (
+					<NavAuthenticated navigation={navigation} />
+				) : (
+					<NavNotAuthenticated />
+				)}
 				<main>
 					<div className="py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
 						{children}

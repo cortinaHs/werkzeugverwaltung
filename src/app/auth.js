@@ -1,13 +1,12 @@
 import NextAuth from "next-auth";
 import { ZodError } from "zod";
 import Credentials from "next-auth/providers/credentials";
-import { signInSchema } from "./lib/zod.js";
+import { signInSchema } from "../lib/zod.js";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { prisma } from "@/app/lib/prisma.js";
+import { prisma } from "@/lib/prisma.js";
 import { revalidatePath } from "next/cache";
 
 const bcrypt = require("bcrypt");
-
 
 export const BASE_PATH = "/api/auth";
 
@@ -61,8 +60,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 			if (user) {
 				// User is available during sign-in
 				if (user.role) {
-					console.log("got")
-					token.role = user.role
+					console.log("got");
+					token.role = user.role;
 				}
 				token.id = user.id;
 			}
@@ -71,9 +70,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 		session({ session, token }) {
 			session.user.id = token.id;
 			if (token.role) {
-				session.user.role = token.role
+				session.user.role = token.role;
 			}
-			
+
 			return session;
 		},
 	},

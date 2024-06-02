@@ -11,15 +11,26 @@ model User {
   id            String          @id @default(cuid())
   name          String?
   email         String?         @unique
-  emailVerified DateTime? @map("email_verified")
+  emailVerified DateTime?       @map("email_verified")
   password      String?
   image         String?
   role          String?
-  Session       Session[]
-  Account       Account?
+  street        String?
+  houseNumber   String?
+  postalCode    String?
+  placeOfResidence String?
+
+  // Beziehungen zu anderen Modellen
+  sessions      Session[]
+  accounts      Account?
+  tools         Tool[]
+  favorites     Favorite[]
+  reservations  Reservation[]
+  notifications Notification[]
  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
   @@map("users")
 }
  
@@ -29,18 +40,18 @@ model Account {
   type                     String
   provider                 String
   providerAccountId        String  @map("provider_account_id")
-  refresh_token            String? @db.Text
-  access_token             String? @db.Text
-  expires_at               Int?
-  token_type               String?
+  refreshToken             String? @db.Text
+  accessToken              String? @db.Text
+  expiresAt                Int?
+  tokenType                String?
   scope                    String?
-  id_token                 String? @db.Text
-  session_state            String?
-  refresh_token_expires_in Int?
+  idToken                  String? @db.Text
+  sessionState             String?
+  refreshTokenExpiresIn    Int?
   user                     User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
  
   @@unique([provider, providerAccountId])
   @@index([userId])
@@ -54,123 +65,104 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
  
   @@index([userId])
   @@map("sessions")
 }
  
 model VerificationToken {
-  identifier String
-  token      String
-  expires    DateTime
+  identifier  String
+  token       String
+  expires     DateTime
  
   @@unique([identifier, token])
   @@map("verificationtokens")
 }
 
-// Das Prisma-Schema
-model Userdata {
-    id Int     @id @default(autoincrement())
-    first_name String
-    last_name String
-    street  String
-    house_number  String
-    postal_code  String
-    place_of_residence  String
-
-    // Beziehung zu Reservation und Tool
-    reservations Reservation[]
-    tools        Tool[]
-    favorites    Favorite[]
-    notifications Notification[]
-
-    @@map("userdata")
-}
-
 model Category {
-    id   Int    @id @default(autoincrement())
-    name String @unique
+  id    Int    @id @default(autoincrement())
+  name  String @unique
 
-    // Beziehung zu Tool
-    tools Tool[]
-    @@map("categories")
+  // Beziehung zu Tool
+  tools Tool[]
+  @@map("categories")
 }
 
 model Tool {
-    id          Int     @id @default(autoincrement())
-    name        String
-    description String?
-    photo       String?
-    categoryId  Int
-    ownerId     Int
-    
-    // Beziehungen
-    category Category @relation(fields: [categoryId], references: [id])
-    owner Userdata @relation(fields: [ownerId], references: [id])
-    
-    reservations Reservation[]
-    favorites    Favorite[]
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
+  photo       String?
+  categoryId  Int
+  ownerId     String
+  createdAt   DateTime @default(now())
+  
+  // Beziehungen
+  category Category @relation(fields: [categoryId], references: [id])
+  owner    User     @relation(fields: [ownerId], references: [id])
+  
+  reservations Reservation[]
+  favorites    Favorite[]
 
-    @@map("tools")
+  @@map("tools")
 }
 
 model Favorite {
-    userId Int
-    toolId Int
+  userId String
+  toolId Int
 
-    // Beziehungen
-    user Userdata @relation(fields: [userId], references: [id])
-    tool Tool @relation(fields: [toolId], references: [id])
+  // Beziehungen
+  user User  @relation(fields: [userId], references: [id])
+  tool Tool  @relation(fields: [toolId], references: [id])
 
-    // Kombinierter Primärschlüssel
-    @@id([userId, toolId])
-    @@map("favorites")
+  // Kombinierter Primärschlüssel
+  @@id([userId, toolId])
+  @@map("favorites")
 }
 
 model Reservation {
-    id         Int      @id @default(autoincrement())
-    userId     Int
-    toolId     Int
-    startDate  DateTime
-    endDate    DateTime
-    confirmed  Boolean  @default(false)
+  id         Int      @id @default(autoincrement())
+  userId     String
+  toolId     Int
+  startDate  DateTime
+  endDate    DateTime
+  confirmed  Boolean  @default(false)
 
-    // Beziehungen
-    user Userdata @relation(fields: [userId], references: [id])
-    tool Tool @relation(fields: [toolId], references: [id])
+  // Beziehungen
+  user User  @relation(fields: [userId], references: [id])
+  tool Tool  @relation(fields: [toolId], references: [id])
 
-    notifications Notification[]
-    loans Loan[]
+  notifications Notification[]
+  loans Loan[]
 
-    @@map("reservations")
+  @@map("reservations")
 }
 
 model Notification {
-    id            Int      @id @default(autoincrement())
-    userId        Int
-    reservationId Int?
-    type          String
-    message       String
-    createdAt     DateTime @default(now())
+  id            Int      @id @default(autoincrement())
+  userId        String
+  reservationId Int?
+  type          String
+  message       String
+  createdAt     DateTime @default(now())
 
-    // Beziehungen
-    user Userdata @relation(fields: [userId], references: [id])
-    reservation Reservation? @relation(fields: [reservationId], references: [id])
+  // Beziehungen
+  user User  @relation(fields: [userId], references: [id])
+  reservation Reservation? @relation(fields: [reservationId], references: [id])
 
-    @@map("notifications")
+  @@map("notifications")
 }
 
 model Loan {
-    id            Int      @id @default(autoincrement())
-    reservationId Int
-    borrowDate    DateTime
-    returnDate    DateTime?
+  id            Int      @id @default(autoincrement())
+  reservationId Int
+  borrowDate    DateTime
+  returnDate    DateTime?
 
-    // Beziehung
-    reservation Reservation @relation(fields: [reservationId], references: [id])
+  // Beziehung
+  reservation Reservation @relation(fields: [reservationId], references: [id])
 
-    @@map("loans")
+  @@map("loans")
 }
-

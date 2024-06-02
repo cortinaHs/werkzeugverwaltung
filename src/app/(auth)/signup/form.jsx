@@ -67,14 +67,13 @@ export function SignupForm() {
 			</div>
 
 			<div>
-				<div className="flex items-center justify-between">
-					<label
-						htmlFor="password"
-						className="block text-sm font-medium leading-6 text-gray-900"
-					>
-						Passwort
-					</label>
-				</div>
+				<label
+					htmlFor="password"
+					className="block text-sm font-medium leading-6 text-gray-900"
+				>
+					Passwort
+				</label>
+
 				<div className="mt-2">
 					<input
 						id="password"
@@ -105,12 +104,15 @@ export function SignupForm() {
 					</div>
 				)}
 			</div>
-			
-			{formState?.errors && !formState?.errors.password && !formState?.errors.email && !formState?.errors.name &&( 
-				<p className="block text-sm italic font-medium leading-6 text-red-600">
-					{formState.errors}
-				</p>
-			)}
+
+			{formState?.errors &&
+				!formState?.errors.password &&
+				!formState?.errors.email &&
+				!formState?.errors.name && (
+					<p className="block text-sm italic font-medium leading-6 text-red-600">
+						{formState.errors}
+					</p>
+				)}
 
 			<div>
 				<button
