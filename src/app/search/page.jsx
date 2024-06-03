@@ -10,28 +10,40 @@ export default async function SearchPage({ searchParams }) {
 	if (!session) {
 		redirect("/signin");
 	}
+	const user = session.user.id;
+
+	const favoritesObj = await prisma.favorite.findMany({
+		where: {
+			userId: user,
+		},
+		select: {
+			toolId: true,
+		},
+	});
+	const favorites = favoritesObj.map((f) => f.toolId);
 	const categories = await prisma.category.findMany();
+
+	const favCheck = searchParams?.favorites || "";
+	const dateFrom = searchParams?.datefrom || "";
+	const dateTo = searchParams?.dateto || "";
+	const sortOption = searchParams?.sort || "";
 	const query = searchParams?.query || "";
 	let categoryFilter = categories.map((c) => c.name);
 	if (searchParams?.category) {
 		categoryFilter = [searchParams?.category];
 	}
-	const dateFrom = searchParams?.datefrom || "";
-	const dateTo = searchParams?.dateto || "";
-
-	const sortOption = searchParams?.sort || "";
 
 	//TODO: Add pagination
-
 	const currentPage = Number(searchParams?.page) || 1;
 
 	const tools = await prisma.tool.findMany({
-		orderBy:[
-				{createdAt: sortOption === "createdAtdesc" ? "desc" : undefined},
-				{name: sortOption === "namedesc" ? "desc" : "asc"},
-			],
+		orderBy: [
+			{ createdAt: sortOption === "createdAtdesc" ? "desc" : undefined },
+			{ name: sortOption === "namedesc" ? "desc" : "asc" },
+		],
 		include: {
 			reservations: true,
+			favorites: true,
 		},
 		where: {
 			name: {
@@ -40,10 +52,16 @@ export default async function SearchPage({ searchParams }) {
 			category: {
 				name: { in: categoryFilter },
 			},
+			favorites: favCheck
+				? {
+					some: {
+						userId: user
+						},
+				}
+				: undefined,
 			reservations: {
 				none: {
 					OR: [
-
 						{
 							AND: [
 								{
@@ -66,7 +84,11 @@ export default async function SearchPage({ searchParams }) {
 
 	return (
 		<>
-			<SearchFilter categories={categories} tools={tools} />
+			<SearchFilter
+				categories={categories}
+				tools={tools}
+				favorites={favorites}
+			/>
 		</>
 	);
 }

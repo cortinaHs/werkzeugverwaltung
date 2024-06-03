@@ -1,5 +1,5 @@
 "use client";
-import { ToolGrid } from "../../components/toolgrid";
+import { ToolGrid } from "../../components/search/toolgrid";
 import { SearchField } from "@/components/search/searchField";
 import { CategorySelection } from "@/components/search/categoryFilters";
 import { DatePickerWithRange } from "@/components/search/dateRangePicker";
@@ -13,18 +13,16 @@ import {
 	MenuItem,
 	Transition,
 	TransitionChild,
-	Checkbox,
-	Label,
-	Field,
 } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/20/solid";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import { FavoritesCheckbox } from "@/components/search/favoritesCheckbox";
 
 const sortOptions = [
-	{ name: "Neueste", value: ["createdAtdesc"]},
-	{ name: "Name A-Z", value: ["nameasc"]},
-	{ name: "Name Z-A", value: ["namedesc"]},
+	{ name: "Neueste", value: ["createdAtdesc"] },
+	{ name: "Name A-Z", value: ["nameasc"] },
+	{ name: "Name Z-A", value: ["namedesc"] },
 ];
 
 function classNames(...classes) {
@@ -34,9 +32,9 @@ function classNames(...classes) {
 // TODO : sort functionality
 // TODO: select favorites and get from db, make checkbox own component
 
-export function SearchFilter({ categories, tools }) {
+export function SearchFilter({ categories, tools, favorites }) {
 	const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-	const [enabled, setEnabled] = useState(false);
+
 	const [sortOption, setSortOption] = useState(undefined);
 
 	const searchParams = useSearchParams();
@@ -46,7 +44,7 @@ export function SearchFilter({ categories, tools }) {
 	function handleSorting(sortOption) {
 		const params = new URLSearchParams(searchParams);
 		params.set("sort", sortOption);
-	
+
 		replace(`${pathname}?${params.toString()}`);
 	}
 
@@ -104,27 +102,7 @@ export function SearchFilter({ categories, tools }) {
 
 										<br />
 										<div className="px-2 pb-6 space-y-4 text-sm border-b border-gray-200 ">
-											<Field className="flex items-center gap-2">
-												<Checkbox
-													checked={enabled}
-													onChange={setEnabled}
-													className="group block size-4 rounded border bg-white data-[checked]:bg-blue-500"
-												>
-													<svg
-														className="stroke-white opacity-0 group-data-[checked]:opacity-100"
-														viewBox="0 0 14 14"
-														fill="none"
-													>
-														<path
-															d="M3 8L6 11L11 3.5"
-															strokeWidth={2}
-															strokeLinecap="round"
-															strokeLinejoin="round"
-														/>
-													</svg>
-												</Checkbox>
-												<Label>Favoriten</Label>
-											</Field>
+											<FavoritesCheckbox />
 										</div>
 										<br />
 
@@ -221,27 +199,7 @@ export function SearchFilter({ categories, tools }) {
 
 								<br />
 								<div className="pb-6 space-y-4 text-sm border-b border-gray-200">
-									<Field className="flex items-center gap-2">
-										<Checkbox
-											checked={enabled}
-											onChange={setEnabled}
-											className="group block size-4 rounded border bg-white data-[checked]:bg-blue-500"
-										>
-											<svg
-												className="stroke-white opacity-0 group-data-[checked]:opacity-100"
-												viewBox="0 0 14 14"
-												fill="none"
-											>
-												<path
-													d="M3 8L6 11L11 3.5"
-													strokeWidth={2}
-													strokeLinecap="round"
-													strokeLinejoin="round"
-												/>
-											</svg>
-										</Checkbox>
-										<Label>Favoriten</Label>
-									</Field>
+									<FavoritesCheckbox />
 								</div>
 								<br />
 								<div className="w-full pb-6 space-y-4 border-b border-gray-200">
@@ -255,7 +213,7 @@ export function SearchFilter({ categories, tools }) {
 
 							{/* Product grid */}
 							<div className="lg:col-span-3">
-								<ToolGrid tools={tools} />
+								<ToolGrid tools={tools} favorites={favorites} />
 							</div>
 						</div>
 					</section>
