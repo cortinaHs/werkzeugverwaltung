@@ -1,50 +1,99 @@
-'use client'; // Dies macht die gesamte Datei zur Client-Komponente
+"use server";
+import { auth } from "../auth";
+import { prisma } from "../../lib/prisma";
+import { Button } from "@/components/ui/button";
+import { revalidatePath } from "next/cache";
 
-import { useState } from 'react';
+export default async function ReservationsPage() {
+	const session = await auth();
+	if (!session) {
+		redirect("/signin");
+	}
+	const user = session.user.id;
 
-const ReservierungsverwaltungPage = () => {
-  const [reservierungen, setReservierungen] = useState([
-    { id: 1, name: 'Rasenmäher', kategorie: 'Gartengeräte', startdatum: '2024-06-01', enddatum: '2024-06-07' },
-    { id: 2, name: 'Heckenschere', kategorie: 'Gartenwerkzeug', startdatum: '2024-06-10', enddatum: '2024-06-14' },
-    // Weitere Reservierungen hier hinzufügen
-  ]);
+	const options = {
+		weekday: "long",
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+	};
 
-  const handleDelete = (id) => {
-    setReservierungen(reservierungen.filter(reservierung => reservierung.id !== id));
-  };
+	const reservations = await prisma.reservation.findMany({
+		where: {
+			userId: user,
+		},
+		include: {
+			tool: true,
+		},
+		orderBy: {
+			startDate: "asc",
+		},
+	});
 
-  return (
-    <div className="min-h-screen flex flex-col items-center bg-gray-100 p-4">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
-        <h1 className="text-3xl font-bold mb-6 text-center">Meine Reservierungen</h1>
-        <div className="mb-6">
-          {reservierungen.length > 0 ? (
-            <ul className="list-disc pl-5 text-gray-700">
-              {reservierungen.map(reservierung => (
-                <li key={reservierung.id} className="mb-4">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="font-bold">{reservierung.name}</p>
-                      <p className="text-sm">Kategorie: {reservierung.kategorie}</p>
-                      <p className="text-sm">Zeitraum: {reservierung.startdatum} bis {reservierung.enddatum}</p>
-                    </div>
-                    <button
-                      onClick={() => handleDelete(reservierung.id)}
-                      className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
-                    >
-                      Löschen
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-gray-700">Keine Reservierungen vorhanden.</p>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
+    async function handleCancel(data) {
+        "use server";
+        const id = Number(data.get("reservationId"));
+        if (id) {
+            const cancelation = await prisma.reservation.delete({
+                where: {
+                    id: id,
+                },
+            });
+            revalidatePath("/reservations", "reservations");
+        }
+    }
 
-export default ReservierungsverwaltungPage;
+	return (
+		<main className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+			<div className="flex items-baseline justify-between pt-24 pb-6 border-b border-gray-200 ">
+				<h1 className="text-4xl font-bold tracking-tight text-gray-900">
+					Reservierte Geräte
+				</h1>
+			</div>
+			{reservations.length === 0 ? (
+				<p className="text-gray-700">Keine Reservierungen vorhanden.</p>
+			) : (
+				<ul role="list" className="divide-y divide-gray-100 ">
+					{reservations.map((reservation) => (
+						<li
+							key={reservation.id}
+							className="flex justify-between py-5 gap-x-6"
+						>
+							<div className="flex min-w-0 gap-x-4">
+								<img
+									className="flex-none w-12 h-12 rounded-full bg-gray-50"
+									src={reservation.tool.photo}
+									alt=""
+								/>
+								<div className="flex-auto min-w-0">
+									<p className="text-sm font-semibold leading-6 text-gray-900">
+										{reservation.tool.name}
+									</p>
+									<p className="mt-1 text-xs leading-5 text-gray-500 truncate">
+										{reservation.startDate.toLocaleDateString("de-DE", options)}{" "}
+										bis{" "}
+										{reservation.endDate.toLocaleDateString("de-DE", options)}
+									</p>
+								</div>
+							</div>
+							<div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+								<form action={handleCancel}>
+									<input
+										name="reservationId"
+										className="hidden"
+										value={reservation.id}
+										readOnly
+									/>
+
+									<Button variant="secondary" type="submit">
+										Reservierung stornieren
+									</Button>
+								</form>
+							</div>
+						</li>
+					))}
+				</ul>
+			)}
+		</main>
+	);
+}
