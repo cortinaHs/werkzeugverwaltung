@@ -16,7 +16,6 @@ export async function updateFavorites(toolid) {
 		},
 	});
 
-
 	if (favorite) {
 		await prisma.favorite.delete({
 			where: {
@@ -33,7 +32,62 @@ export async function updateFavorites(toolid) {
 				toolId: toolid,
 			},
 		});
-    }
-    
-    revalidatePath("/search", "search")
+	}
+
+	revalidatePath("/search", "search");
+}
+
+export async function updateReservations(prevsState, formData) {
+	const session = await auth();
+	const user = session.user.id;
+
+	let dateFrom = formData.get("dateFrom");
+	let dateTo = formData.get("dateTo");
+	const toolid = Number(formData.get("toolId"));
+
+	if (dateFrom && dateTo) {
+		dateFrom = new Date(dateFrom);
+		dateTo = new Date(dateTo);
+	} else if (!dateTo) {
+		dateTo = new Date(dateFrom);
+		dateFrom = new Date(dateFrom);
+	} else {
+
+		return { error: "Bitte wähle ein Datum aus." };
+	}
+
+	const reservationCheck = await prisma.reservation.findFirst({
+		where: {
+			toolId: toolid,
+			OR: [
+				{
+					AND: [
+						{
+							startDate: { gte: dateFrom },
+						},
+						{ startDate: { lte: dateTo } },
+					],
+				},
+				{
+					AND: [{ endDate: { gte: dateFrom } }, { endDate: { lte: dateTo } }],
+				},
+			],
+		},
+	});
+
+	if (!reservationCheck) {
+		await prisma.reservation.create({
+			data: {
+				userId: user,
+				toolId: toolid,
+				startDate: dateFrom,
+				endDate: dateTo,
+			},
+		});
+		return { success: "Werkzeug erfolgreich reserviert." };
+	} else {
+		return {
+			error: "Dieses Werkzeug ist in diesem Zeitraum bereits reserviert.",
+		};
+	}
 }

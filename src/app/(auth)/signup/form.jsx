@@ -6,7 +6,7 @@ import { useFormState } from "react-dom";
 
 export function SignupForm() {
 	const [formState, formAction] = useFormState(signUp, undefined);
-	console.log(formState?.errors)
+
 	return (
 		<form className="space-y-6" method="POST">
 			<div>
