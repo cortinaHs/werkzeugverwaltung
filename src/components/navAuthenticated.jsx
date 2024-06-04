@@ -116,7 +116,7 @@ export function NavAuthenticated({navigation}) {
 											<MenuItem>
 												{({ open }) => (
 													<Link
-														href="/tools"
+														href="/ownedtools"
 														className={classNames(
 															open ? "bg-gray-100" : "",
 															"block px-4 py-2 text-sm text-gray-700"

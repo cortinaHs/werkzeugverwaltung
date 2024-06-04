@@ -3,6 +3,8 @@ import { auth } from "../auth";
 import { prisma } from "../../lib/prisma";
 import { Button } from "@/components/ui/button";
 import { revalidatePath } from "next/cache";
+import { Button as LinkButton } from "@headlessui/react";
+import { redirect } from "next/navigation";
 
 export default async function ReservationsPage() {
 	const session = await auth();
@@ -30,18 +32,23 @@ export default async function ReservationsPage() {
 		},
 	});
 
-    async function handleCancel(data) {
-        "use server";
-        const id = Number(data.get("reservationId"));
-        if (id) {
-            const cancelation = await prisma.reservation.delete({
-                where: {
-                    id: id,
-                },
-            });
-            revalidatePath("/reservations", "reservations");
-        }
-    }
+	async function handleCancel(data) {
+		"use server";
+		const id = Number(data.get("reservationId"));
+		if (id) {
+			const cancelation = await prisma.reservation.delete({
+				where: {
+					id: id,
+				},
+			});
+			revalidatePath("/reservations", "reservations");
+		}
+	}
+
+	async function redirectsearch(data) {
+		"use server";
+		redirect("/search");
+	}
 
 	return (
 		<main className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -51,48 +58,121 @@ export default async function ReservationsPage() {
 				</h1>
 			</div>
 			{reservations.length === 0 ? (
-				<p className="text-gray-700">Keine Reservierungen vorhanden.</p>
-			) : (
-				<ul role="list" className="divide-y divide-gray-100 ">
-					{reservations.map((reservation) => (
-						<li
-							key={reservation.id}
-							className="flex justify-between py-5 gap-x-6"
+				<div>
+					<p className="py-2 text-gray-700">Keine Reservierungen vorhanden.</p>
+					<form action={redirectsearch}>
+						<LinkButton
+							type="submit"
+							className="rounded bg-green-600 py-2 px-4 text-sm text-white data-[hover]:bg-green-500 data-[active]:bg-green-700"
 						>
-							<div className="flex min-w-0 gap-x-4">
-								<img
-									className="flex-none w-12 h-12 rounded-full bg-gray-50"
-									src={reservation.tool.photo}
-									alt=""
-								/>
-								<div className="flex-auto min-w-0">
-									<p className="text-sm font-semibold leading-6 text-gray-900">
-										{reservation.tool.name}
-									</p>
-									<p className="mt-1 text-xs leading-5 text-gray-500 truncate">
-										{reservation.startDate.toLocaleDateString("de-DE", options)}{" "}
-										bis{" "}
-										{reservation.endDate.toLocaleDateString("de-DE", options)}
-									</p>
-								</div>
-							</div>
-							<div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-								<form action={handleCancel}>
-									<input
-										name="reservationId"
-										className="hidden"
-										value={reservation.id}
-										readOnly
-									/>
+							Geräte suchen
+						</LinkButton>
+					</form>
+				</div>
+			) : (
+				<>
+					<ul role="list" className="divide-y divide-gray-100 ">
+						{reservations.map((reservation) => (
+							<div key={reservation.id}>
+								{reservation.endDate >= new Date() && (
+									<li
+										key={reservation.id}
+										className="flex justify-between py-5 gap-x-6"
+									>
+										<div className="flex min-w-0 gap-x-4">
+											<img
+												className="flex-none w-12 h-12 rounded-full bg-gray-50"
+												src={reservation.tool.photo}
+												alt=""
+											/>
+											<div className="flex-auto min-w-0">
+												<p className="text-sm font-semibold leading-6 text-gray-900">
+													{reservation.tool.name}
+												</p>
+												<p className="mt-1 text-xs leading-5 text-gray-500 truncate">
+													{reservation.startDate.toLocaleDateString(
+														"de-DE",
+														options
+													)}{" "}
+													bis{" "}
+													{reservation.endDate.toLocaleDateString(
+														"de-DE",
+														options
+													)}
+												</p>
+											</div>
+										</div>
+										<div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+											<form action={handleCancel}>
+												<input
+													name="reservationId"
+													className="hidden"
+													value={reservation.id}
+													readOnly
+												/>
 
-									<Button variant="secondary" type="submit">
-										Reservierung stornieren
-									</Button>
-								</form>
+												<Button variant="secondary" type="submit">
+													Reservierung stornieren
+												</Button>
+											</form>
+										</div>
+									</li>
+								)}
 							</div>
-						</li>
-					))}
-				</ul>
+						))}
+					</ul>
+
+					<h2 className="text-2xl font-bold tracking-tight text-gray-900">
+						Vergangene Reservierungen
+					</h2>
+					<ul role="list" className="divide-y divide-gray-100 ">
+						{reservations.map((reservation) => (
+							<div key={reservation.id}>
+								{reservation.endDate < new Date() && (
+									<li className="flex justify-between py-5 gap-x-6">
+										<div className="flex min-w-0 gap-x-4">
+											<img
+												className="flex-none w-12 h-12 rounded-full bg-gray-50"
+												src={reservation.tool.photo}
+												alt=""
+											/>
+											<div className="flex-auto min-w-0">
+												<p className="text-sm font-semibold leading-6 text-gray-900">
+													{reservation.tool.name}
+												</p>
+												<p className="mt-1 text-xs leading-5 text-gray-500 truncate">
+													{reservation.startDate.toLocaleDateString(
+														"de-DE",
+														options
+													)}{" "}
+													bis{" "}
+													{reservation.endDate.toLocaleDateString(
+														"de-DE",
+														options
+													)}
+												</p>
+											</div>
+										</div>
+										<div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+											{/* <form action={handleCancel}>
+												<input
+													name="reservationId"
+													className="hidden"
+													value={reservation.id}
+													readOnly
+												/>
+
+												<Button variant="secondary" type="submit">
+													Erneut reservieren
+												</Button>
+											</form> */}
+										</div>
+									</li>
+								)}
+							</div>
+						))}
+					</ul>
+				</>
 			)}
 		</main>
 	);
