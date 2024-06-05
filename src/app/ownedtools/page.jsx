@@ -40,6 +40,8 @@ export default async function ReservationsPage() {
         redirect("/toolregistration");
     }
 	//TODO:  Update
+	const defaultphoto ="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/330px-No-Image-Placeholder.svg.png?20200912122019";
+
 
 	return (
 		<main className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -64,12 +66,18 @@ export default async function ReservationsPage() {
 				<ul role="list" className="divide-y divide-gray-100 ">
 					{tools.map((tool) => (
 						<li key={tool.id} className="flex justify-between py-5 gap-x-6">
-							<div className="flex min-w-0 gap-x-4">
+							<div className="flex min-w-0 gap-x-4"> 
+								{tool.photo && tool.imgtype ? (
 								<img
 									className="flex-none w-12 h-12 rounded-full bg-gray-50"
-									src={tool.photo}
+									src={"data:" + tool.imgtype + ";base64, " + tool.photo.toString()}
 									alt=""
-								/>
+								/>) : (<img
+									className="flex-none w-12 h-12 rounded-full bg-gray-50"
+									src={defaultphoto}
+									alt="default photo"
+								/>)
+							}
 								<div className="flex-auto min-w-0">
 									<p className="text-sm font-semibold leading-6 text-gray-900">
 										{tool.name}

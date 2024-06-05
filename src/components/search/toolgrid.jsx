@@ -27,7 +27,7 @@ export function ToolGrid({ tools, favorites }) {
 	}
 	const [date, setDate] = useState(undefined);
 	const [formState, formAction] = useFormState(updateReservations, null);
-
+	const defaultphoto = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/330px-No-Image-Placeholder.svg.png?20200912122019";
 	
 	return (
 		<div className="bg-white">
@@ -36,11 +36,24 @@ export function ToolGrid({ tools, favorites }) {
 					<div key={tool.id}>
 						<div className="relative group">
 							<div className="w-full overflow-hidden rounded-md bg-stone-300 aspect-h-1 aspect-w-1 lg:aspect-none group-hover:opacity-75 lg:h-80">
-								<img
-									src={tool.photo}
-									alt={tool.name}
-									className="object-cover object-center w-full h-full lg:h-full lg:w-full"
-								/>
+								{tool.photo && tool.imgtype ? (
+									<img
+										src={
+											"data:" +
+											tool.imgtype +
+											";base64, " +
+											tool.photo.toString()
+										}
+										alt={tool.name}
+										className="object-cover object-center w-full h-full lg:h-full lg:w-full"
+									/>
+								) : (
+									<img
+										src={defaultphoto}
+										alt="default photo"
+										className="object-cover object-center w-full h-full lg:h-full lg:w-full"
+									/>
+								)}
 							</div>
 							<div className="flex justify-between mt-4 space-x-5">
 								<div>
@@ -53,10 +66,7 @@ export function ToolGrid({ tools, favorites }) {
 											</Button>
 										</DialogTrigger>
 										<DialogContent className="sm:max-w-[425px]">
-											<form
-												action={formAction}
-												className="space-y-8"
-											>
+											<form action={formAction} className="space-y-8">
 												<DialogHeader>
 													<DialogTitle>
 														Jetzt {tool.name} reservieren
@@ -86,24 +96,24 @@ export function ToolGrid({ tools, favorites }) {
 												<input type="hidden" name="dateTo" value={date?.to} />
 												<DialogFooter>
 													<div className="flex">
-														{formState?.error &&
+														{formState?.error && (
 															<div className="contents">
 																<ExclamationCircleIcon className="w-5 h-5 text-red-600" />
 																<p className="text-sm italic font-medium leading-6 text-red-600 ">
 																	{formState.error}
 																</p>
 															</div>
-														}
+														)}
 													</div>
 													<div className="flex">
-														{formState?.success &&
+														{formState?.success && (
 															<div className="contents">
 																<CheckIcon className="w-5 h-5 text-green-600" />
 																<p className="text-sm italic font-medium leading-6 text-green-600 ">
 																	{formState.success}
 																</p>
 															</div>
-														}
+														)}
 													</div>
 
 													<Button type="submit">Reservieren</Button>

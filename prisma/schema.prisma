@@ -94,7 +94,8 @@ model Tool {
   id          Int     @id @default(autoincrement())
   name        String
   description String?
-  photo       String?
+  photo       String? @db.LongText
+  imgtype     String?
   categoryId  Int
   ownerId     String
   createdAt   DateTime @default(now())

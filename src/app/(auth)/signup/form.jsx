@@ -92,7 +92,7 @@ export function SignupForm() {
 				{formState?.errors.password && (
 					<div>
 						<p className="block text-sm italic font-medium leading-6 text-red-600">
-							Password must:
+							Password muss:
 						</p>
 						<ul>
 							{formState.errors.password.map((error) => (
