@@ -1,130 +1,138 @@
-'use client';
+import { auth } from "../auth";
+import { prisma } from "../../lib/prisma";
+import { redirect } from "next/navigation";
+import { ProfileActionDialogs } from "./dialogs";
+import {EditProfileSchema} from "../../lib/zod";
+import { revalidatePath } from "next/cache";
+import { signOut } from "next-auth/react";
 
-import { useState } from 'react';
 
-export default function BenutzerPage () {
-  const [isEditing, setIsEditing] = useState(false);
-  const [user, setUser] = useState({
-    name: "Max Mustermann",
-    email: "max@example.com",
-    telefon: "01234 567890",
-    strasse: "Musterstraße 1",
-    stadt: "Musterstadt",
-    postleitzahl: "12345",
-    bio: "Hier ist eine kurze Biografie des Benutzers.",
+export default async function UserProfilePage() {
+	const session = await auth();
+	if (!session) {
+		redirect("/signin");
+	}
+	const user = session.user.id;
+
+	const userdata = await prisma.user.findUnique({
+		where: {
+			id: user,
+		},
   });
+  
+  async function handleDelete() {
+    "use server"
+    const deleteReservations = prisma.reservation.deleteMany({
+      where: {
+        userId: user,
+      },
+    })
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
-  };
+    const deleteFavorites = prisma.favorite.deleteMany({
+      where: {
+        userId: user,
+      },
+    })
+    
+    const deleteTools = prisma.tool.deleteMany({
+			where: {
+				ownerId: user,
+			},
+    });
+    
+    // notifications to add
+    
+    const deleteUser = prisma.user.delete({
+      where: {
+        id: user,
+      },
+    });
+    const transaction = await prisma.$transaction([deleteReservations, deleteFavorites, deleteTools, deleteUser]);
+    signOut();
+    redirect("/");
+  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsEditing(false);
-    // Hier können Sie die Logik zum Speichern der Änderungen hinzufügen, z.B. API-Aufruf
-  };
+  async function handleEdit(formState, formData) {
+    "use server";
+
+    const validatedFields = EditProfileSchema.safeParse({
+			name: formData.get("name"),
+			email: formData.get("email"),
+		});
+		// If any form fields are invalid, return early
+		if (!validatedFields.success) {
+			return {
+				errors: validatedFields.error.flatten().fieldErrors,
+			};
+    } 
+    const { name, email } = validatedFields.data;
+    const street = formData.get("street") || "";
+    const houseNumber = formData.get("houseNumber") || "";
+    const postalCode = formData.get("postalCode") || "";
+    const placeOfResidence = formData.get("placeOfResidence") || "";
+    
+    const updateUser = await prisma.user.update({
+			where: {
+				id: user,
+			},
+			data: {
+				name: name,
+				email: email,
+				street: street,
+				houseNumber: houseNumber,
+				postalCode: postalCode,
+				placeOfResidence: placeOfResidence,
+			},
+    });
+    revalidatePath("/userprofile", "userprofile");
+  }
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-4 bg-gray-100">
-      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
-        <h1 className="mb-6 text-3xl font-bold text-center">Benutzerprofil</h1>
-        {isEditing ? (
-          <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label htmlFor="name" className="block mb-2 text-gray-700">Name</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={user.name}
-                onChange={handleInputChange}
-                className="w-full p-2 text-gray-900 border border-gray-300 rounded"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="email" className="block mb-2 text-gray-700">E-Mail</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={user.email}
-                onChange={handleInputChange}
-                className="w-full p-2 text-gray-900 border border-gray-300 rounded"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="telefon" className="block mb-2 text-gray-700">Telefon</label>
-              <input
-                type="tel"
-                id="telefon"
-                name="telefon"
-                value={user.telefon}
-                onChange={handleInputChange}
-                className="w-full p-2 text-gray-900 border border-gray-300 rounded"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="strasse" className="block mb-2 text-gray-700">Straße</label>
-              <input
-                type="text"
-                id="strasse"
-                name="strasse"
-                value={user.strasse}
-                onChange={handleInputChange}
-                className="w-full p-2 text-gray-900 border border-gray-300 rounded"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="stadt" className="block mb-2 text-gray-700">Stadt</label>
-              <input
-                type="text"
-                id="stadt"
-                name="stadt"
-                value={user.stadt}
-                onChange={handleInputChange}
-                className="w-full p-2 text-gray-900 border border-gray-300 rounded"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="postleitzahl" className="block mb-2 text-gray-700">Postleitzahl</label>
-              <input
-                type="text"
-                id="postleitzahl"
-                name="postleitzahl"
-                value={user.postleitzahl}
-                onChange={handleInputChange}
-                className="w-full p-2 text-gray-900 border border-gray-300 rounded"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="bio" className="block mb-2 text-gray-700">Biografie</label>
-              <textarea
-                id="bio"
-                name="bio"
-                value={user.bio}
-                onChange={handleInputChange}
-                className="w-full p-2 text-gray-900 border border-gray-300 rounded"
-              />
-            </div>
-            <button type="submit" className="w-full py-2 text-white bg-blue-500 rounded hover:bg-blue-600">Speichern</button>
-          </form>
-        ) : (
-          <div>
-            <p className="mb-4 text-gray-700"><span className="font-bold">Name:</span> {user.name}</p>
-            <p className="mb-4 text-gray-700"><span className="font-bold">E-Mail:</span> {user.email}</p>
-            <p className="mb-4 text-gray-700"><span className="font-bold">Telefon:</span> {user.telefon}</p>
-            <p className="mb-4 text-gray-700"><span className="font-bold">Straße:</span> {user.strasse}</p>
-            <p className="mb-4 text-gray-700"><span className="font-bold">Stadt:</span> {user.stadt}</p>
-            <p className="mb-4 text-gray-700"><span className="font-bold">Postleitzahl:</span> {user.postleitzahl}</p>
-            <p className="mb-4 text-gray-700"><span className="font-bold">Biografie:</span> {user.bio}</p>
-            <button onClick={() => setIsEditing(true)} className="w-full py-2 text-white bg-green-500 rounded hover:bg-green-600">Bearbeiten</button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
+		<main className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+			<div className="flex items-baseline justify-between pt-24 pb-6 border-b border-gray-200 ">
+				<h1 className="text-4xl font-bold tracking-tight text-gray-900">
+					Profilinformationen
+				</h1>
+			</div>
+			<div className="mt-6 border-t border-gray-100">
+				<dl className="divide-y divide-gray-100">
+					<div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+						<dt className="text-sm font-medium leading-6 text-gray-900">
+							Name
+						</dt>
+						<dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+							{userdata.name}
+						</dd>
+					</div>
+					<div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+						<dt className="text-sm font-medium leading-6 text-gray-900">
+							E-Mail Adresse
+						</dt>
+						<dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+							{userdata.email}
+						</dd>
+					</div>
+
+					<div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+						<dt className="text-sm font-medium leading-6 text-gray-900">
+							Adresse
+						</dt>
+						<dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+							{userdata.houseNumber &&
+							userdata.street &&
+							userdata.postalCode &&
+							userdata.placeOfResidence
+								? `${userdata.street} ${userdata.houseNumber}, ${userdata.postalCode} ${userdata.placeOfResidence}`
+								: "Keine Adresse hinterlegt"}
+						</dd>
+					</div>
+				</dl>
+			</div>
+			<ProfileActionDialogs
+				handleDelete={handleDelete}
+				userdata={userdata}
+				handleEdit={handleEdit}
+			/>
+		</main>
+	);
+}

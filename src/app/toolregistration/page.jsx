@@ -1,7 +1,7 @@
 "use server";
 import { auth } from "../auth";
 import { prisma } from "../../lib/prisma";
-import { ToolrestrationForm } from "./form";
+import { ToolregistrationForm } from "./form";
 import { ToolRegistrationSchema } from "@/lib/zod";
 import { redirect } from "next/navigation";
 
@@ -66,7 +66,7 @@ export default async function toolregistrationPage() {
 					Gerät registrieren
 				</h1>
 			</div>
-			<ToolrestrationForm handleForm={registertool} categories={categories} />
+			<ToolregistrationForm handleForm={registertool} categories={categories} />
 		</main>
 	);
 }

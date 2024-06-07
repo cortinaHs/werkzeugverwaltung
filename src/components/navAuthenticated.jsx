@@ -1,7 +1,7 @@
 "use client";
 import { Fragment } from 'react'
 import { Disclosure, DisclosureButton, DisclosurePanel, MenuItem, MenuItems, MenuButton, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon , WrenchScrewdriverIcon} from '@heroicons/react/24/outline'
+import { Bars3Icon, BellIcon, XMarkIcon , WrenchScrewdriverIcon, UserIcon} from '@heroicons/react/24/outline'
 import Link from "next/link"
 import { signOut } from 'next-auth/react';
 import { redirect, usePathname } from 'next/navigation';
@@ -68,26 +68,22 @@ export function NavAuthenticated({navigation}) {
 								</div>
 							</div>
 							<div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-								<button
+								{/* <button
 									type="button"
 									className="relative p-1 text-white rounded-full bg-neutral-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neural-700"
 								>
 									<span className="absolute -inset-1.5" />
 									<span className="sr-only">View notifications</span>
 									<BellIcon className="w-6 h-6" aria-hidden="true" />
-								</button>
+								</button> */}
 
 								{/* Profile dropdown */}
 								<Menu as="div" className="relative ml-3">
 									<div>
-										<MenuButton className="relative flex text-sm rounded-full bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-700">
+										<MenuButton className="relative p-1 text-white rounded-full bg-neutral-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neural-700">
 											<span className="absolute -inset-1.5" />
 											<span className="sr-only">Open user menu</span>
-											<img
-												className="w-8 h-8 rounded-full"
-												src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-												alt=""
-											/>
+											<UserIcon className="w-6 h-6" aria-hidden="true" />
 										</MenuButton>
 									</div>
 									<Transition
@@ -129,7 +125,10 @@ export function NavAuthenticated({navigation}) {
 											<MenuItem>
 												{({ open }) => (
 													<button
-														onClick={() => { signOut(); redirect("/") }}
+														onClick={() => {
+															signOut();
+															redirect("/");
+														}}
 														className={classNames(
 															open ? "bg-gray-100" : "",
 															"block px-4 py-2 text-sm text-gray-700"

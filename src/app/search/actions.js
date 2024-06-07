@@ -84,6 +84,7 @@ export async function updateReservations(prevsState, formData) {
 				endDate: dateTo,
 			},
 		});
+		revalidatePath("/reservations", "reservations");
 		return { success: "Werkzeug erfolgreich reserviert." };
 	} else {
 		return {

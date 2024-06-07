@@ -18,7 +18,7 @@ function classNames(...classes) {
 	return classes.filter(Boolean).join(" ");
 }
 
-export function ToolrestrationForm({ handleForm, categories }) {
+export function ToolregistrationForm({ handleForm, categories }) {
 	const [formState, formAction] = useFormState(handleForm, undefined);
 	// const { pending } = useFormStatus();
 	const [selected, setSelected] = useState(null);
@@ -45,14 +45,18 @@ export function ToolrestrationForm({ handleForm, categories }) {
 										name="name"
 										id="name"
 										autoComplete="name"
-										className="`indent-1 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+										className={`indent-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6 ${
+											formState?.errors.name
+												? "ring-red-600 focus:ring-red-600 text-red-600 "
+												: ""
+										}`}
 									/>
 								</div>
-								{/* {formState?.errors.name && (
+								{formState?.errors.name && (
 									<p className="block text-sm italic text-red-600">
 										{formState.errors.name}
 									</p>
-								)} */}
+								)}
 							</div>
 						</div>
 
@@ -65,7 +69,14 @@ export function ToolrestrationForm({ handleForm, categories }) {
 										</Label>
 
 										<div className="relative mt-2">
-											<ListboxButton className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6">
+											<ListboxButton
+												className={`indent-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6 ${
+													formState?.errors.category
+														? "ring-red-600 focus:ring-red-600 text-red-600 "
+														: ""
+												}`}
+												// className="pl-3 pr-10 text-left cursor-default "
+											>
 												<span className="flex items-center">
 													<span className="block ml-3 truncate">
 														{selected?.name || "Wähle eine Kategorie"}
@@ -84,8 +95,13 @@ export function ToolrestrationForm({ handleForm, categories }) {
 													readOnly
 													required
 												/>
+												
 											</ListboxButton>
-
+											{formState?.errors.category && (
+													<p className="block text-sm italic text-red-600">
+														{formState.errors.category}
+													</p>
+												)}
 											<Transition
 												show={open}
 												leave="transition ease-in duration-100"
@@ -98,7 +114,7 @@ export function ToolrestrationForm({ handleForm, categories }) {
 															key={category.id}
 															className={({ focus }) =>
 																classNames(
-																	focus ? "bg-indigo-600 text-white" : "",
+																	focus ? "bg-green-600 text-white" : "",
 																	!focus ? "text-gray-900" : "",
 																	"relative cursor-default select-none py-2 pl-3 pr-9"
 																)
@@ -126,7 +142,7 @@ export function ToolrestrationForm({ handleForm, categories }) {
 																				className={classNames(
 																					focus
 																						? "text-white"
-																						: "text-indigo-600",
+																						: "text-green-600",
 																					"absolute inset-y-0 right-0 flex items-center pr-4"
 																				)}
 																			>
@@ -162,9 +178,18 @@ export function ToolrestrationForm({ handleForm, categories }) {
 									name="description"
 									type="description"
 									rows={3}
-									className="indent-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+									className={`indent-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6 ${
+										formState?.errors.description
+											? "ring-red-600 focus:ring-red-600 text-red-600 "
+											: ""
+									}`}
 									defaultValue={""}
 								/>
+								{formState?.errors.description && (
+									<p className="block text-sm italic text-red-600">
+										{formState.errors.description}
+									</p>
+								)}
 							</div>
 							<p className="mt-3 text-sm leading-6 text-gray-600">
 								Schreibe ein paar Worte über das Gerät.
@@ -231,12 +256,6 @@ export function ToolrestrationForm({ handleForm, categories }) {
 				</div>
 			</div>
 			<div className="flex items-center justify-end mt-6 gap-x-6">
-				<button
-					type="button"
-					className="text-sm font-semibold leading-6 text-gray-900"
-				>
-					Abbrechen
-				</button>
 				<button
 					type="submit"
 					className="px-3 py-2 text-sm font-semibold text-white bg-green-600 rounded-md shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"

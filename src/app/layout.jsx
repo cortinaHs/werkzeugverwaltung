@@ -34,7 +34,7 @@ const navigation = [
 	revalidatePath("/", "layout")
 	const session = await auth()
 	if (session?.user.role === "admin") {
-		navigation.push({name: "Admintools", href:"/admin", current: false})
+		navigation.push({ name: "Adminbereich", href: "/admin", current: false });
 	}
 	return (
 		<html lang="en">

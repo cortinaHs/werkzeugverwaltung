@@ -40,3 +40,14 @@ export const ToolRegistrationSchema = z.object({
 	category: z.string().min(1, { message: "Kategorie ist erforderlich." }),
 	description: z.string().min(2, { message: "Beschreibung muss mindestens 2 Zeichen lang sein." }).trim(),
 });
+
+export const EditProfileSchema = z.object({
+	name: z
+		.string()
+		.min(2, { message: "Name muss mindestens 2 Zeichen lang sein." })
+		.trim(),
+	email: z
+		.string()
+		.email({ message: "Bitte geben Sie eine gültige E-Mail-Adresse ein." })
+		.trim(),
+});
