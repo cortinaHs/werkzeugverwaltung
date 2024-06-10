@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:20-alpine3.18
 
 WORKDIR /app
 
@@ -21,3 +21,5 @@ RUN chmod +x /usr/local/bin/docker-entrypoint
 ENTRYPOINT ["docker-entrypoint"]
 
 CMD ["npm", "run", "dev"]
+
+
