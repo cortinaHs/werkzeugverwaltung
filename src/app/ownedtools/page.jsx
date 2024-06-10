@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Button as LinkButton } from "@headlessui/react";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { toolActionDialogs } from "./dialogs";
 
 export default async function ReservationsPage() {
 	const session = await auth();
@@ -20,6 +21,9 @@ export default async function ReservationsPage() {
 		orderBy: {
 			name: "asc",
 		},
+		include: {
+			category: true,
+		},
 	});
 
 	async function handleDelete(data) {
@@ -33,7 +37,8 @@ export default async function ReservationsPage() {
 			});
 			revalidatePath("/ownedtools", "ownedtools");
 		}
-    }
+	}
+	
     
     async function redirecttoolregistration(data) {
         "use server";
@@ -66,40 +71,54 @@ export default async function ReservationsPage() {
 				<ul role="list" className="divide-y divide-gray-100 ">
 					{tools.map((tool) => (
 						<li key={tool.id} className="flex justify-between py-5 gap-x-6">
-							<div className="flex min-w-0 gap-x-4"> 
+							<div className="flex min-w-0 gap-x-4">
 								{tool.photo && tool.imgtype ? (
-								<img
-									className="flex-none w-12 h-12 rounded-full bg-gray-50"
-									src={"data:" + tool.imgtype + ";base64, " + tool.photo.toString()}
-									alt=""
-								/>) : (<img
-									className="flex-none w-12 h-12 rounded-full bg-gray-50"
-									src={defaultphoto}
-									alt="default photo"
-								/>)
-							}
+									<img
+										className="flex-none w-12 h-12 rounded-full bg-gray-50"
+										src={
+											"data:" +
+											tool.imgtype +
+											";base64, " +
+											tool.photo.toString()
+										}
+										alt=""
+									/>
+								) : (
+									<img
+										className="flex-none w-12 h-12 rounded-full bg-gray-50"
+										src={defaultphoto}
+										alt="default photo"
+									/>
+								)}
 								<div className="flex-auto min-w-0">
 									<p className="text-sm font-semibold leading-6 text-gray-900">
 										{tool.name}
 									</p>
 									<p className="mt-1 text-xs leading-5 text-gray-500 truncate">
-										{tool.description}
+										{tool.category.name} | {tool.description}
 									</p>
 								</div>
 							</div>
-							<div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-								<form action={handleDelete}>
-									<input
-										name="toolId"
-										className="hidden"
-										value={tool.id}
-										readOnly
-									/>
 
+							<div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+								<div className="flex items-center justify-end gap-x-4">
 									<Button variant="secondary" type="submit">
-										Gerät löschen
+											Gerät bearbeiten
 									</Button>
-								</form>
+
+									<form action={handleDelete}>
+										<input
+											name="toolId"
+											className="hidden"
+											value={tool.id}
+											readOnly
+										/>
+										
+										<Button variant="secondary" type="submit">
+											Gerät löschen
+										</Button>
+									</form>
+								</div>
 							</div>
 						</li>
 					))}

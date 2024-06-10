@@ -2,10 +2,9 @@ import { auth } from "../auth";
 import { prisma } from "../../lib/prisma";
 import { redirect } from "next/navigation";
 import { ProfileActionDialogs } from "./dialogs";
-import {EditProfileSchema} from "../../lib/zod";
+import { EditProfileSchema } from "../../lib/zod";
 import { revalidatePath } from "next/cache";
 import { signOut } from "next-auth/react";
-
 
 export default async function UserProfilePage() {
 	const session = await auth();
@@ -18,44 +17,49 @@ export default async function UserProfilePage() {
 		where: {
 			id: user,
 		},
-  });
-  
-  async function handleDelete() {
-    "use server"
-    const deleteReservations = prisma.reservation.deleteMany({
-      where: {
-        userId: user,
-      },
-    })
+	});
 
-    const deleteFavorites = prisma.favorite.deleteMany({
-      where: {
-        userId: user,
-      },
-    })
-    
-    const deleteTools = prisma.tool.deleteMany({
+	async function handleDelete() {
+		"use server";
+		const deleteReservations = prisma.reservation.deleteMany({
+			where: {
+				userId: user,
+			},
+		});
+
+		const deleteFavorites = prisma.favorite.deleteMany({
+			where: {
+				userId: user,
+			},
+		});
+
+		const deleteTools = prisma.tool.deleteMany({
 			where: {
 				ownerId: user,
 			},
-    });
-    
-    // notifications to add
-    
-    const deleteUser = prisma.user.delete({
-      where: {
-        id: user,
-      },
-    });
-    const transaction = await prisma.$transaction([deleteReservations, deleteFavorites, deleteTools, deleteUser]);
-    signOut();
-    redirect("/");
-  }
+		});
 
-  async function handleEdit(formState, formData) {
-    "use server";
+		// notifications to add
 
-    const validatedFields = EditProfileSchema.safeParse({
+		const deleteUser = prisma.user.delete({
+			where: {
+				id: user,
+			},
+		});
+		const transaction = await prisma.$transaction([
+			deleteReservations,
+			deleteFavorites,
+			deleteTools,
+			deleteUser,
+		]);
+		signOut();
+		redirect("/");
+	}
+
+	async function handleEdit(formState, formData) {
+		"use server";
+
+		const validatedFields = EditProfileSchema.safeParse({
 			name: formData.get("name"),
 			email: formData.get("email"),
 		});
@@ -64,14 +68,14 @@ export default async function UserProfilePage() {
 			return {
 				errors: validatedFields.error.flatten().fieldErrors,
 			};
-    } 
-    const { name, email } = validatedFields.data;
-    const street = formData.get("street") || "";
-    const houseNumber = formData.get("houseNumber") || "";
-    const postalCode = formData.get("postalCode") || "";
-    const placeOfResidence = formData.get("placeOfResidence") || "";
-    
-    const updateUser = await prisma.user.update({
+		}
+		const { name, email } = validatedFields.data;
+		const street = formData.get("street") || "";
+		const houseNumber = formData.get("houseNumber") || "";
+		const postalCode = formData.get("postalCode") || "";
+		const placeOfResidence = formData.get("placeOfResidence") || "";
+
+		const updateUser = await prisma.user.update({
 			where: {
 				id: user,
 			},
@@ -83,11 +87,11 @@ export default async function UserProfilePage() {
 				postalCode: postalCode,
 				placeOfResidence: placeOfResidence,
 			},
-    });
-    revalidatePath("/userprofile", "userprofile");
-  }
+		});
+		revalidatePath("/userprofile", "userprofile");
+	}
 
-  return (
+	return (
 		<main className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
 			<div className="flex items-baseline justify-between pt-24 pb-6 border-b border-gray-200 ">
 				<h1 className="text-4xl font-bold tracking-tight text-gray-900">

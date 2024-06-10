@@ -100,7 +100,7 @@ export default async function ReservationsPage() {
 													alt="default photo"
 												/>
 											)}
-							
+
 											<div className="flex-auto min-w-0">
 												<p className="text-sm font-semibold leading-6 text-gray-900">
 													{reservation.tool.name}
@@ -119,18 +119,23 @@ export default async function ReservationsPage() {
 											</div>
 										</div>
 										<div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-											<form action={handleCancel}>
-												<input
-													name="reservationId"
-													className="hidden"
-													value={reservation.id}
-													readOnly
-												/>
-
+											<div className="flex items-center justify-end gap-x-4">
 												<Button variant="secondary" type="submit">
-													Reservierung stornieren
+													Reservierung verlängern
 												</Button>
-											</form>
+												<form action={handleCancel}>
+													<input
+														name="reservationId"
+														className="hidden"
+														value={reservation.id}
+														readOnly
+													/>
+
+													<Button variant="secondary" type="submit">
+														Reservierung stornieren
+													</Button>
+												</form>
+											</div>
 										</div>
 									</li>
 								)}
@@ -168,20 +173,6 @@ export default async function ReservationsPage() {
 													)}
 												</p>
 											</div>
-										</div>
-										<div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-											{/* <form action={handleCancel}>
-												<input
-													name="reservationId"
-													className="hidden"
-													value={reservation.id}
-													readOnly
-												/>
-
-												<Button variant="secondary" type="submit">
-													Erneut reservieren
-												</Button>
-											</form> */}
 										</div>
 									</li>
 								)}
