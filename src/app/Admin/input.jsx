@@ -52,6 +52,30 @@ export function CategoryTable({ categories, deleteCategory, addCategory }) {
 													id="categoryId"
 													value={category.id}
 												></input>
+												{/* <AlertDialog>
+													<AlertDialogTrigger>
+														<Button variant="outline">Gerät Löschen</Button>
+													</AlertDialogTrigger>
+													<AlertDialogContent>
+														<AlertDialogHeader>
+															<AlertDialogTitle>
+																Bist du dir absolut sicher?
+															</AlertDialogTitle>
+															<AlertDialogDescription>
+																Diese Aktion kann nicht rückgängig gemacht
+																werden.
+															</AlertDialogDescription>
+														</AlertDialogHeader>
+														<AlertDialogFooter>
+															<AlertDialogCancel>Abbrechen</AlertDialogCancel>
+															<AlertDialogAction
+																onClick={() => handleDelete(tool.id)}
+															>
+																Gerät Löschen
+															</AlertDialogAction>
+														</AlertDialogFooter>
+													</AlertDialogContent>
+												</AlertDialog> */}
 												<Button type="submit" variant="outline" size="icon">
 													<XMarkIcon className="w-3 h-3" />
 												</Button>

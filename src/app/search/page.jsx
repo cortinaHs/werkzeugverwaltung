@@ -57,7 +57,7 @@ export default async function SearchPage({ searchParams }) {
 						some: {
 							userId: user,
 						},
-				  }
+				}
 				: undefined,
 			reservations: {
 				none: {
