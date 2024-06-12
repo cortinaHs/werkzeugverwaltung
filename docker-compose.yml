@@ -7,13 +7,13 @@ services:
       - ./public:/app/public
       - ./src:/app/src
       - ./prisma:/app/prisma
-
     ports:
       - "3000:3000"
     environment:
       NODE_ENV: development
     depends_on:
       - mysql
+  
 
   mysql:
     hostname: werkzeugverwaltung_mysql

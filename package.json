@@ -29,6 +29,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
+    "dos2unix": "^1.1.2",
     "next": "14.2.3",
     "next-auth": "^5.0.0-beta.17",
     "react": "^18.3.1",
