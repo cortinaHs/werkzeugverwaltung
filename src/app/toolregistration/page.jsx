@@ -56,6 +56,7 @@ export default async function toolregistrationPage() {
 				ownerId: user,
 			},
 		});
+		redirect("/ownedtools");
 	};
 
 	

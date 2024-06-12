@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { revalidatePath } from "next/cache";
 import { Button as LinkButton } from "@headlessui/react";
 import { redirect } from "next/navigation";
+import { ReservationsDialogs } from "./dialogs";
 
 export default async function ReservationsPage() {
 	const session = await auth();
@@ -34,7 +35,8 @@ export default async function ReservationsPage() {
 
 	async function handleCancel(data) {
 		"use server";
-		const id = Number(data.get("reservationId"));
+		const id = data;
+		console.log(id)
 		if (id) {
 			const cancelation = await prisma.reservation.delete({
 				where: {
@@ -42,6 +44,50 @@ export default async function ReservationsPage() {
 				},
 			});
 			revalidatePath("/reservations", "reservations");
+		}
+	}
+
+	async function updateReservations(formState, formData) {
+		"use server";
+		const id = Number(formData.get("reservationId"));
+		const toolId = Number(formData.get("toolId"));
+		const dateTo = new Date(formData.get("dateTo"));
+		dateTo.setDate(dateTo.getDate() + 1);
+		const endDate = new Date(formData.get("endDate"));
+		const reservationCheck = await prisma.reservation.findFirst({
+			where: {
+				toolId: toolId,
+				OR: [
+					{
+						AND: [
+							{
+								startDate: { gt: endDate },
+							},
+							{ startDate: { lte: dateTo } },
+						],
+					},
+					{
+						AND: [{ endDate: { gt: endDate } }, { endDate: { lte: dateTo } }],
+					},
+				],
+			},
+		});
+
+		if (!reservationCheck) {
+			const updatedReservation = await prisma.reservation.update({
+				where: {
+					id: id,
+				},
+				data: {
+					endDate: dateTo,
+				},
+			});
+			revalidatePath("/reservations", "reservations");
+			return { success: "Werkzeug erfolgreich reserviert." };
+		} else {
+			return {
+				error: "Dieses Werkzeug ist in diesem Zeitraum bereits reserviert.",
+			};
 		}
 	}
 
@@ -119,23 +165,11 @@ export default async function ReservationsPage() {
 											</div>
 										</div>
 										<div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-											<div className="flex items-center justify-end gap-x-4">
-												<Button variant="secondary" type="submit">
-													Reservierung verlängern
-												</Button>
-												<form action={handleCancel}>
-													<input
-														name="reservationId"
-														className="hidden"
-														value={reservation.id}
-														readOnly
-													/>
-
-													<Button variant="secondary" type="submit">
-														Reservierung stornieren
-													</Button>
-												</form>
-											</div>
+											<ReservationsDialogs
+												reservation={reservation}
+												handleCancel={handleCancel}
+												updateReservations={updateReservations}
+											/>
 										</div>
 									</li>
 								)}

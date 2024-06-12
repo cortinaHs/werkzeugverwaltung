@@ -22,9 +22,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 				password: {},
 			},
 
-			// TODO: handle errors with formState
-
-			// authorize: async (credentials) => {
+			
 			async authorize(credentials) {
 				try {
 					const { email, password } = await signInSchema.parseAsync(

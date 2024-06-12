@@ -22,35 +22,38 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
+import { PhotoUploader } from "@/components/photoUploader"
+import { CategorySelector } from "@/components/categorySelector";
 
 ;
-	export function toolActionDialogs({ tool }) {
-		// const [formState, formAction] = useFormState(handleEdit, undefined);
+	export function ToolActionDialogs({ tool, handleEdit, handleDelete, categories }) {
+		const [formState, formAction] = useFormState(handleEdit, undefined);
 
 		return (
 			<div className="flex items-center justify-end mt-6 gap-x-6">
 				<Dialog>
 					<DialogTrigger asChild>
-						<Button>Profil Bearbeiten</Button>
+						<Button variant="outline">Gerät Bearbeiten</Button>
 					</DialogTrigger>
 					<DialogContent className="sm:max-w-[425px]">
 						<DialogHeader>
-							<DialogTitle>Profil Bearbeiten</DialogTitle>
+							<DialogTitle>Gerät Bearbeiten</DialogTitle>
 						</DialogHeader>
 						<form action={formAction}>
 							<div className="grid gap-4 py-4">
-								<div className="grid items-center grid-cols-4 gap-4">
+								<input type="hidden" name="id" value={tool.id} />
+								<div >
 									<Label htmlFor="name" className="text-right">
-										Name
+										Name*
 									</Label>
 									<Input
 										required
 										id="name"
 										name="name"
 										type="name"
-										placeholder={userdata.name}
-										className="col-span-3"
+										placeholder={tool.name}
+										className="relative mt-2"
 									/>
 								</div>
 								{formState?.errors.name && (
@@ -59,74 +62,30 @@ import { useFormState, useFormStatus } from "react-dom";
 									</p>
 								)}
 
-								<div className="grid items-center grid-cols-4 gap-4">
+								<div>
 									<Label htmlFor="email" className="text-right">
-										Email
+										Beschreibung*
 									</Label>
 
 									<Input
 										required
-										id="email"
-										name="email"
-										type="email"
-										placeholder={userdata.email}
-										className="col-span-3"
+										id="description"
+										name="description"
+										type="description"
+										placeholder={tool.description}
+										className="relative mt-2"
 									/>
 								</div>
-								{formState?.errors.email && (
+								{formState?.errors.description && (
 									<p className="block text-sm italic text-red-600">
-										{formState.errors.email}
+										{formState.errors.description}
 									</p>
 								)}
-
-								<div className="grid items-center grid-cols-4 gap-4">
-									<Label htmlFor="street" className="text-right">
-										Straße
-									</Label>
-									<Input
-										id="street"
-										name="street"
-										type="street"
-										placeholder={userdata.street}
-										className="col-span-3"
-									/>
-								</div>
-								<div className="grid items-center grid-cols-4 gap-4">
-									<Label htmlFor="houseNumber" className="text-right">
-										Nr.
-									</Label>
-									<Input
-										id="houseNumber"
-										name="houseNumber"
-										type="houseNumber"
-										placeholder={userdata.houseNumber}
-										className="col-span-3"
-									/>
-								</div>
-								<div className="grid items-center grid-cols-4 gap-4">
-									<Label htmlFor="postalCode" className="text-right">
-										PLZ
-									</Label>
-									<Input
-										id="postalCode"
-										type="postalCode"
-										name="postalCode"
-										placeholder={userdata.postalCode}
-										className="col-span-3"
-									/>
-								</div>
-								<div className="grid items-center grid-cols-4 gap-4">
-									<Label htmlFor="placeOfResidence" className="text-right">
-										Stadt
-									</Label>
-									<Input
-										id="placeOfResidence"
-										type="placeOfResidence"
-										name="placeOfResidence"
-										placeholder={userdata.placeOfResidence}
-										className="col-span-3"
-									/>
-								</div>
+								<CategorySelector
+									categories={categories}
+									formState={formState}
+								/>
+								<PhotoUploader />
 							</div>
 							<DialogFooter>
 								<Button type="submit">Speichern</Button>
@@ -137,21 +96,19 @@ import { useFormState, useFormStatus } from "react-dom";
 
 				<AlertDialog>
 					<AlertDialogTrigger>
-						<Button variant="destructive">Profil Löschen</Button>
+						<Button variant="outline">Gerät Löschen</Button>
 					</AlertDialogTrigger>
 					<AlertDialogContent>
 						<AlertDialogHeader>
 							<AlertDialogTitle>Bist du dir absolut sicher?</AlertDialogTitle>
 							<AlertDialogDescription>
-								Diese Aktion kann nicht rückgängig gemacht werden. Dadurch wird
-								dein Konto dauerhaft gelöscht und deine Daten von unseren
-								Servern entfernt.
+								Diese Aktion kann nicht rückgängig gemacht werden.
 							</AlertDialogDescription>
 						</AlertDialogHeader>
 						<AlertDialogFooter>
 							<AlertDialogCancel>Abbrechen</AlertDialogCancel>
-							<AlertDialogAction onClick={() => handleDelete()}>
-								Profil Löschen
+							<AlertDialogAction onClick={() => handleDelete(tool.id)}>
+								Gerät Löschen
 							</AlertDialogAction>
 						</AlertDialogFooter>
 					</AlertDialogContent>

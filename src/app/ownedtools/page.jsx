@@ -1,11 +1,11 @@
 "use server";
 import { auth } from "../auth";
 import { prisma } from "../../lib/prisma";
-import { Button } from "@/components/ui/button";
 import { Button as LinkButton } from "@headlessui/react";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { toolActionDialogs } from "./dialogs";
+import { ToolActionDialogs } from "./dialogs";
+import { ToolRegistrationSchema } from "@/lib/zod";
 
 export default async function ReservationsPage() {
 	const session = await auth();
@@ -13,6 +13,8 @@ export default async function ReservationsPage() {
 		redirect("/signin");
 	}
 	const user = session.user.id;
+
+	const categories = await prisma.category.findMany();
 
 	const tools = await prisma.tool.findMany({
 		where: {
@@ -28,7 +30,7 @@ export default async function ReservationsPage() {
 
 	async function handleDelete(data) {
 		"use server";
-		const id = Number(data.get("toolId"));
+		const id = data;
 		if (id) {
 			const deleteTool = await prisma.tool.delete({
 				where: {
@@ -39,6 +41,48 @@ export default async function ReservationsPage() {
 		}
 	}
 	
+	async function handleEdit(formState, formData) {
+		"use server";
+		const validatedFields = ToolRegistrationSchema.safeParse({
+			name: formData.get("name"),
+			category: formData.get("categoryId"),
+			description: formData.get("description"),
+		});
+		// If any form fields are invalid, return early
+		if (!validatedFields.success) {
+			return {
+				errors: validatedFields.error.flatten().fieldErrors,
+			};
+		} 
+	
+		const { name, category, description } = validatedFields.data;
+		const id = Number(formData.get("id"));
+		const image = formData.get("file-upload")
+		const imageReader = image.stream().getReader();
+		const imageDataU8 = [];
+		while (true) {
+				const { done, value } = await imageReader.read();
+				if (done) break;
+
+				imageDataU8.push(...value);
+			}
+
+		const base64 = Buffer.from(imageDataU8).toString('base64')
+
+
+
+		const tool = await prisma.tool.update({
+			where: { id: id },
+			data: {
+				name,
+				description,
+				photo: image ? base64 : "",
+				imgtype: image ? image.type : "",
+				categoryId: Number(category),
+			},
+		});
+		revalidatePath("/ownedtools", "ownedtools");
+	}
     
     async function redirecttoolregistration(data) {
         "use server";
@@ -101,24 +145,12 @@ export default async function ReservationsPage() {
 							</div>
 
 							<div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-								<div className="flex items-center justify-end gap-x-4">
-									<Button variant="secondary" type="submit">
-											Gerät bearbeiten
-									</Button>
-
-									<form action={handleDelete}>
-										<input
-											name="toolId"
-											className="hidden"
-											value={tool.id}
-											readOnly
-										/>
-										
-										<Button variant="secondary" type="submit">
-											Gerät löschen
-										</Button>
-									</form>
-								</div>
+								<ToolActionDialogs
+									tool={tool}
+									handleEdit={handleEdit}
+									handleDelete={handleDelete}
+									categories={categories}
+								/>
 							</div>
 						</li>
 					))}
