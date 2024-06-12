@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { XMarkIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,8 +16,11 @@ import {
 
 export function CategoryTable({ categories, deleteCategory, addCategory }) {
 	const [formStateAdd, addAction] = useFormState(addCategory, undefined);
-	const [formStateDelete, deleteAction] = useFormState(deleteCategory, undefined);
-	
+	const [formStateDelete, deleteAction] = useFormState(
+		deleteCategory,
+		undefined
+	);
+
 	return (
 		<>
 			<Table className="w-2/3 p-4">

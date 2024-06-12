@@ -11,14 +11,13 @@ export function FavoritesCheckbox() {
 	const searchParams = useSearchParams();
 
 	function handleCheck() {
-        const params = new URLSearchParams(searchParams);
+		const params = new URLSearchParams(searchParams);
 
-        if (!enabled) {
-            setEnabled(true);
-            params.set("favorites", true);
-
-        } else {
-            setEnabled(false);
+		if (!enabled) {
+			setEnabled(true);
+			params.set("favorites", true);
+		} else {
+			setEnabled(false);
 			params.delete("favorites");
 		}
 		replace(`${pathname}?${params.toString()}`);

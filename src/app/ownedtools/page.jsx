@@ -40,7 +40,7 @@ export default async function ReservationsPage() {
 			revalidatePath("/ownedtools", "ownedtools");
 		}
 	}
-	
+
 	async function handleEdit(formState, formData) {
 		"use server";
 		const validatedFields = ToolRegistrationSchema.safeParse({
@@ -53,23 +53,21 @@ export default async function ReservationsPage() {
 			return {
 				errors: validatedFields.error.flatten().fieldErrors,
 			};
-		} 
-	
+		}
+
 		const { name, category, description } = validatedFields.data;
 		const id = Number(formData.get("id"));
-		const image = formData.get("file-upload")
+		const image = formData.get("file-upload");
 		const imageReader = image.stream().getReader();
 		const imageDataU8 = [];
 		while (true) {
-				const { done, value } = await imageReader.read();
-				if (done) break;
+			const { done, value } = await imageReader.read();
+			if (done) break;
 
-				imageDataU8.push(...value);
-			}
+			imageDataU8.push(...value);
+		}
 
-		const base64 = Buffer.from(imageDataU8).toString('base64')
-
-
+		const base64 = Buffer.from(imageDataU8).toString("base64");
 
 		const tool = await prisma.tool.update({
 			where: { id: id },
@@ -83,14 +81,14 @@ export default async function ReservationsPage() {
 		});
 		revalidatePath("/ownedtools", "ownedtools");
 	}
-    
-    async function redirecttoolregistration(data) {
-        "use server";
-        redirect("/toolregistration");
-    }
-	//TODO:  Update
-	const defaultphoto ="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/330px-No-Image-Placeholder.svg.png?20200912122019";
 
+	async function redirecttoolregistration(data) {
+		"use server";
+		redirect("/toolregistration");
+	}
+	//TODO:  Update
+	const defaultphoto =
+		"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/330px-No-Image-Placeholder.svg.png?20200912122019";
 
 	return (
 		<main className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">

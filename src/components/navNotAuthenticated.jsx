@@ -23,12 +23,11 @@ function classNames(...classes) {
 }
 
 export function NavNotAuthenticated() {
+	const navigation = [
+		{ name: "Anmelden", href: "/signin", current: false },
+		{ name: "Registrieren", href: "/signup", current: false },
+	];
 
-    const navigation = [
-	{ name: "Anmelden", href: "/signin", current: false },
-	{ name: "Registrieren", href: "/signup", current: false },
-    ];
-    
 	return (
 		<Disclosure as="nav" className="fixed inset-x-0 top-0 z-10 bg-stone-300">
 			{({ open }) => (

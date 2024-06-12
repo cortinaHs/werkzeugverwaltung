@@ -54,10 +54,10 @@ export default async function SearchPage({ searchParams }) {
 			},
 			favorites: favCheck
 				? {
-					some: {
-						userId: user
+						some: {
+							userId: user,
 						},
-				}
+				  }
 				: undefined,
 			reservations: {
 				none: {

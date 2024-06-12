@@ -24,18 +24,17 @@ export function DatePickerWithRange({ className }) {
 	const { replace } = useRouter();
 
 	function handleDateFilters() {
-        const params = new URLSearchParams(searchParams);
+		const params = new URLSearchParams(searchParams);
 
-
-        if (!date) {
-            params.delete("datefrom");
-            params.delete("dateto");
-        } else if (date.from && !date.to) {
-            params.set("datefrom", format(date.from, "yyyy-MM-dd"));
-            params.set("dateto", format(date.from, "yyyy-MM-dd"));
-        } else {
-            params.set("datefrom", format(date.from, "yyyy-MM-dd"));
-		    params.set("dateto", format(date.to, "yyyy-MM-dd"));
+		if (!date) {
+			params.delete("datefrom");
+			params.delete("dateto");
+		} else if (date.from && !date.to) {
+			params.set("datefrom", format(date.from, "yyyy-MM-dd"));
+			params.set("dateto", format(date.from, "yyyy-MM-dd"));
+		} else {
+			params.set("datefrom", format(date.from, "yyyy-MM-dd"));
+			params.set("dateto", format(date.to, "yyyy-MM-dd"));
 		}
 
 		replace(`${pathname}?${params.toString()}`);
@@ -83,7 +82,7 @@ export function DatePickerWithRange({ className }) {
 				</PopoverContent>
 			</Popover>
 
-			<Button type="button"  onClick={() => handleDateFilters()}>
+			<Button type="button" onClick={() => handleDateFilters()}>
 				Verfügbarkeit prüfen
 			</Button>
 		</div>

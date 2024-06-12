@@ -36,9 +36,15 @@ export const SignupFormSchema = z.object({
 });
 
 export const ToolRegistrationSchema = z.object({
-	name: z.string().min(2, { message: "Name muss mindestens 2 Zeichen lang sein." }).trim(),
+	name: z
+		.string()
+		.min(2, { message: "Name muss mindestens 2 Zeichen lang sein." })
+		.trim(),
 	category: z.string().min(1, { message: "Kategorie ist erforderlich." }),
-	description: z.string().min(2, { message: "Beschreibung muss mindestens 2 Zeichen lang sein." }).trim(),
+	description: z
+		.string()
+		.min(2, { message: "Beschreibung muss mindestens 2 Zeichen lang sein." })
+		.trim(),
 });
 
 export const EditProfileSchema = z.object({

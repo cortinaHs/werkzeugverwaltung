@@ -6,7 +6,6 @@ import { CategorySelector } from "@/components/categorySelector";
 export function ToolregistrationForm({ handleForm, categories }) {
 	const [formState, formAction] = useFormState(handleForm, undefined);
 
-
 	return (
 		<form action={formAction}>
 			<div className="space-y-12">
@@ -41,7 +40,7 @@ export function ToolregistrationForm({ handleForm, categories }) {
 								)}
 							</div>
 						</div>
-						
+
 						<div className="col-span-full">
 							<label
 								htmlFor="about"

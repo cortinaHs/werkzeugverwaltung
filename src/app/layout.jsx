@@ -7,32 +7,29 @@ import { auth } from "./auth";
 import { revalidatePath } from "next/cache";
 import { cn } from "@/lib/utils";
 
-
 // const inter = Inter({ subsets: ["latin"] });
 const fontSans = FontSans({
 	subsets: ["latin"],
 	variable: "--font-sans",
 });
 
-
 export const metadata = {
 	title: "Neighbortool",
 	description: "Wirtschaftsinformatik-Projekt Werkzeugverwaltung",
 	icons: {
-		icon: "toolIcon.svg"
-	}
+		icon: "toolIcon.svg",
+	},
 };
 
-
 export default async function RootLayout({ children }) {
-const navigation = [
-	{ name: "Gerätesuche", href: "/search", current: false },
-	{ name: "Reservierungen", href: "/reservations", current: false },
-	{ name: "Gerät registrieren", href: "/toolregistration", current: false },
-];
-	
-	revalidatePath("/", "layout")
-	const session = await auth()
+	const navigation = [
+		{ name: "Gerätesuche", href: "/search", current: false },
+		{ name: "Reservierungen", href: "/reservations", current: false },
+		{ name: "Gerät registrieren", href: "/toolregistration", current: false },
+	];
+
+	revalidatePath("/", "layout");
+	const session = await auth();
 	if (session?.user.role === "admin") {
 		navigation.push({ name: "Adminbereich", href: "/admin", current: false });
 	}

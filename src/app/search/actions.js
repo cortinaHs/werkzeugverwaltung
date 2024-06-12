@@ -52,7 +52,6 @@ export async function updateReservations(prevsState, formData) {
 		dateTo = new Date(dateFrom);
 		dateFrom = new Date(dateFrom);
 	} else {
-
 		return { error: "Bitte wähle ein Datum aus." };
 	}
 

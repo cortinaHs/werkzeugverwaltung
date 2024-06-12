@@ -1,18 +1,31 @@
 "use client";
-import { Fragment } from 'react'
-import { Disclosure, DisclosureButton, DisclosurePanel, MenuItem, MenuItems, MenuButton, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon , WrenchScrewdriverIcon, UserIcon} from '@heroicons/react/24/outline'
-import Link from "next/link"
-import { signOut } from 'next-auth/react';
-import { redirect, usePathname } from 'next/navigation';
+import { Fragment } from "react";
+import {
+	Disclosure,
+	DisclosureButton,
+	DisclosurePanel,
+	MenuItem,
+	MenuItems,
+	MenuButton,
+	Menu,
+	Transition,
+} from "@headlessui/react";
+import {
+	Bars3Icon,
+	BellIcon,
+	XMarkIcon,
+	WrenchScrewdriverIcon,
+	UserIcon,
+} from "@heroicons/react/24/outline";
+import Link from "next/link";
+import { signOut } from "next-auth/react";
+import { redirect, usePathname } from "next/navigation";
 
 function classNames(...classes) {
 	return classes.filter(Boolean).join(" ");
 }
 
-
-
-export function NavAuthenticated({navigation}) {
+export function NavAuthenticated({ navigation }) {
 	const pathname = usePathname();
 	navigation.forEach((element) => {
 		if (element.href === pathname) {

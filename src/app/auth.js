@@ -22,7 +22,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 				password: {},
 			},
 
-			
 			async authorize(credentials) {
 				try {
 					const { email, password } = await signInSchema.parseAsync(
@@ -55,7 +54,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 	},
 	callbacks: {
 		jwt({ token, user }) {
-
 			if (user) {
 				// User is available during sign-in
 				if (user.role) {
@@ -65,7 +63,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 			}
 			return token;
 		},
-		session ({ session, token }) {
+		session({ session, token }) {
 			session.user.id = token.id;
 			if (token.role) {
 				session.user.role = token.role;

@@ -1,15 +1,14 @@
-import {auth} from "@/app/auth.js"
+import { auth } from "@/app/auth.js";
 import Link from "next/link";
 import SignInForm from "./form.jsx";
 import { redirect } from "next/navigation.js";
 
-
 export default async function SignInPage() {
 	const session = await auth();
 	if (session?.user) {
-		redirect("/")
+		redirect("/");
 	}
-	
+
 	return (
 		<>
 			<div className="flex flex-col justify-center flex-1 min-h-full px-6 py-12 lg:px-8">
@@ -20,7 +19,7 @@ export default async function SignInPage() {
 				</div>
 
 				<div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-					<SignInForm/>
+					<SignInForm />
 					<p className="mt-10 text-sm text-center text-gray-500">
 						Noch kein Mitglied?{" "}
 						<Link

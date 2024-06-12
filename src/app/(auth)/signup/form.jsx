@@ -3,7 +3,6 @@
 import { signUp } from "./action";
 import { useFormState } from "react-dom";
 
-
 export function SignupForm() {
 	const [formState, formAction] = useFormState(signUp, undefined);
 

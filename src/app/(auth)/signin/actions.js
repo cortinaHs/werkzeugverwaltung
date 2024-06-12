@@ -3,7 +3,6 @@
 import { signIn } from "@/app/auth";
 import { AuthError } from "next-auth";
 
-
 export async function authenticate(prevState, formData) {
 	try {
 		await signIn("credentials", {
@@ -12,7 +11,7 @@ export async function authenticate(prevState, formData) {
 			redirectTo: "/search",
 		});
 	} catch (error) {
-		console.log(error)
+		console.log(error);
 		if (error instanceof AuthError) {
 			switch (error.type) {
 				case "CredentialsSignin":

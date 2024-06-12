@@ -20,15 +20,15 @@ import { toast } from "@/components/ui/use-toast";
 import { ExclamationCircleIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { useFormState } from "react-dom";
 
-
 export function ToolGrid({ tools, favorites }) {
 	function handleFavorites(toolid) {
 		updateFavorites(toolid);
 	}
 	const [date, setDate] = useState(undefined);
 	const [formState, formAction] = useFormState(updateReservations, null);
-	const defaultphoto = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/330px-No-Image-Placeholder.svg.png?20200912122019";
-	
+	const defaultphoto =
+		"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/330px-No-Image-Placeholder.svg.png?20200912122019";
+
 	return (
 		<div className="bg-white">
 			<div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 xl:grid-cols-4 xl:gap-x-8">
