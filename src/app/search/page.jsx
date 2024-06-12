@@ -33,8 +33,10 @@ export default async function SearchPage({ searchParams }) {
 		categoryFilter = [searchParams?.category];
 	}
 
-	//TODO: Add pagination
-	const currentPage = Number(searchParams?.page) || 1;
+	async function redirecttoolregistration() {
+		"use server";
+		redirect("/toolregistration");
+	}
 
 	const tools = await prisma.tool.findMany({
 		orderBy: [
@@ -88,6 +90,7 @@ export default async function SearchPage({ searchParams }) {
 				categories={categories}
 				tools={tools}
 				favorites={favorites}
+				redirecttoolregistration={redirecttoolregistration}
 			/>
 		</>
 	);

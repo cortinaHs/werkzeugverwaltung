@@ -5,6 +5,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { CategoryTable } from "./input";
 import { revalidatePath } from "next/cache";
+import { unwatchFile } from "fs";
 
 export default async function Admin() {
 	const session = await auth();
@@ -19,9 +20,9 @@ export default async function Admin() {
 	const categories = await prisma.category.findMany();
 	const users = await prisma.user.findMany();
 
-	async function deleteCategory(formstate, formData) {
+	async function deleteCategory(data) {
 		"use server";
-		const id = Number(formData.get("categoryId"))
+		const id = Number(data);
 		const deleteTools = prisma.tool.deleteMany({ where: { categoryId: id } });
 		const deleteCategory = prisma.category.delete({
 			where: { id },
@@ -34,15 +35,18 @@ export default async function Admin() {
 	}
 	async function addCategory(formstate, formData) {
 		"use server";
-		const category = formData.get("category");
-		const addCategory = await prisma.category.create({
-			data: {
-				name: category,
-			}
-		});
-		revalidatePath("/admin", "admin");
+		const category = formData.get("category") || undefined;
+		if (category) {
+			const addCategory = await prisma.category.create({
+				data: {
+					name: category,
+				},
+			});
+			revalidatePath("/admin", "admin");
+		} else {
+			return { error: "Kategorie kann nicht leer sein." };
+		}
 	}
-	
 
 	return (
 		<main className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">

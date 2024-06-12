@@ -18,6 +18,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/20/solid";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { FavoritesCheckbox } from "@/components/search/favoritesCheckbox";
+import { Button as LinkButton } from "@headlessui/react";
 
 const sortOptions = [
 	{ name: "Neueste", value: ["createdAtdesc"] },
@@ -29,10 +30,13 @@ function classNames(...classes) {
 	return classes.filter(Boolean).join(" ");
 }
 
-// TODO : sort functionality
-// TODO: select favorites and get from db, make checkbox own component
 
-export function SearchFilter({ categories, tools, favorites }) {
+export function SearchFilter({
+	categories,
+	tools,
+	favorites,
+	redirecttoolregistration,
+}) {
 	const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
 	const [sortOption, setSortOption] = useState(undefined);
@@ -213,7 +217,23 @@ export function SearchFilter({ categories, tools, favorites }) {
 
 							{/* Product grid */}
 							<div className="lg:col-span-3">
-								<ToolGrid tools={tools} favorites={favorites} />
+								{tools.length != 0 ? (
+									<ToolGrid tools={tools} favorites={favorites} />
+								) : (
+									<div>
+										<p className="py-2 text-gray-700">
+											Keine Geräte vorhanden.
+										</p>
+										<form action={redirecttoolregistration}>
+											<LinkButton
+												type="submit"
+												className="rounded bg-green-600 py-2 px-4 text-sm text-white data-[hover]:bg-green-500 data-[active]:bg-green-700"
+											>
+												Geräte hinzufügen
+											</LinkButton>
+										</form>
+									</div>
+								)}
 							</div>
 						</div>
 					</section>

@@ -13,13 +13,20 @@ import {
 	TableRow,
 	TableFooter,
 } from "@/components/ui/table";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export function CategoryTable({ categories, deleteCategory, addCategory }) {
 	const [formStateAdd, addAction] = useFormState(addCategory, undefined);
-	const [formStateDelete, deleteAction] = useFormState(
-		deleteCategory,
-		undefined
-	);
 
 	return (
 		<>
@@ -38,23 +45,22 @@ export function CategoryTable({ categories, deleteCategory, addCategory }) {
 							<>
 								{categories.map((category) => (
 									<TableRow key={category.id} className="flex justify-between">
-										<TableCell className="w-full text-base font-medium">
-											<form
-												action={deleteAction}
-												className="flex items-center justify-between"
-											>
-												<p>{category.name}</p>
-												<input
-													className="hidden"
-													readOnly
-													name="categoryId"
-													type="categoryId"
-													id="categoryId"
-													value={category.id}
-												></input>
-												{/* <AlertDialog>
+										<TableCell className="flex justify-between w-full text-base font-medium">
+											<p>{category.name}</p>
+											<input
+												className="hidden"
+												readOnly
+												name="categoryId"
+												type="categoryId"
+												id="categoryId"
+												value={category.id}
+											></input>
+											<div>
+												<AlertDialog>
 													<AlertDialogTrigger>
-														<Button variant="outline">Gerät Löschen</Button>
+														<Button size="icon" variant="outline">
+															<XMarkIcon className="w-3 h-3" />
+														</Button>
 													</AlertDialogTrigger>
 													<AlertDialogContent>
 														<AlertDialogHeader>
@@ -63,23 +69,21 @@ export function CategoryTable({ categories, deleteCategory, addCategory }) {
 															</AlertDialogTitle>
 															<AlertDialogDescription>
 																Diese Aktion kann nicht rückgängig gemacht
-																werden.
+																werden. Alle Geräte dieser Kategorie werden aus
+																der Datenbank entfernt.
 															</AlertDialogDescription>
 														</AlertDialogHeader>
 														<AlertDialogFooter>
 															<AlertDialogCancel>Abbrechen</AlertDialogCancel>
 															<AlertDialogAction
-																onClick={() => handleDelete(tool.id)}
+																onClick={() => deleteCategory(category.id)}
 															>
-																Gerät Löschen
+																Kategorie Löschen
 															</AlertDialogAction>
 														</AlertDialogFooter>
 													</AlertDialogContent>
-												</AlertDialog> */}
-												<Button type="submit" variant="outline" size="icon">
-													<XMarkIcon className="w-3 h-3" />
-												</Button>
-											</form>
+												</AlertDialog>
+											</div>
 										</TableCell>
 									</TableRow>
 								))}
@@ -104,11 +108,17 @@ export function CategoryTable({ categories, deleteCategory, addCategory }) {
 									name="category"
 									placeholder="Kategorie hinzufügen"
 								/>
+
 								<br />
 
 								<Button type="submit" variant="outline" size="icon">
 									<ChevronRightIcon className="w-4 h-4" />
 								</Button>
+								{formStateAdd?.error && (
+									<p className="block text-sm italic text-red-600">
+										{formStateAdd.error}
+									</p>
+								)}
 							</form>
 						</TableCell>
 					</TableRow>
