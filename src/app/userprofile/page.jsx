@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { ProfileActionDialogs } from "./dialogs";
 import { EditProfileSchema } from "../../lib/zod";
 import { revalidatePath } from "next/cache";
-import { signOut } from "next-auth/react";
+import { signOut } from "../auth";
 
 export default async function UserProfilePage() {
 	const session = await auth();
