@@ -39,20 +39,19 @@ export default async function UserProfilePage() {
 			},
 		});
 
-		// notifications to add
-
 		const deleteUser = prisma.user.delete({
 			where: {
 				id: user,
 			},
 		});
+		signOut();
+		
 		const transaction = await prisma.$transaction([
 			deleteReservations,
 			deleteFavorites,
 			deleteTools,
 			deleteUser,
 		]);
-		signOut();
 		redirect("/");
 	}
 
