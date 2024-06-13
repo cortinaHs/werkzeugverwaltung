@@ -45,7 +45,7 @@ export default async function UserProfilePage() {
 			},
 		});
 		signOut();
-		
+
 		const transaction = await prisma.$transaction([
 			deleteReservations,
 			deleteFavorites,
