@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { ToolActionDialogs } from "./dialogs";
 import { ToolRegistrationSchema } from "@/lib/zod";
 
-export default async function ReservationsPage() {
+export default async function OwnedTools() {
 	const session = await auth();
 	if (!session) {
 		redirect("/signin");

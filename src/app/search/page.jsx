@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { auth } from "../auth";
 import { SearchFilter } from "./filter";
 import { prisma } from "../../lib/prisma";
+import { revalidatePath } from "next/cache";
 
 export const dynamic = "force-dynamic";
 
@@ -59,7 +60,7 @@ export default async function SearchPage({ searchParams }) {
 						some: {
 							userId: user,
 						},
-				}
+				  }
 				: undefined,
 			reservations: {
 				none: {
@@ -83,7 +84,7 @@ export default async function SearchPage({ searchParams }) {
 			},
 		},
 	});
-
+	revalidatePath("/search", "search");
 	return (
 		<>
 			<SearchFilter

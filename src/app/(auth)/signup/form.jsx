@@ -1,6 +1,6 @@
 "use client";
 
-import { signUp } from "./action";
+import { signUp } from "./actions";
 import { useFormState } from "react-dom";
 
 export function SignupForm() {

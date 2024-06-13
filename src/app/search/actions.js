@@ -85,6 +85,7 @@ export async function updateReservations(prevsState, formData) {
 			},
 		});
 		revalidatePath("/reservations", "reservations");
+		revalidatePath("/search", "search");
 		return { success: "Werkzeug erfolgreich reserviert." };
 	} else {
 		return {
